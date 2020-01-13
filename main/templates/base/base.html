@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
     {% load bootstrap4 %}
-
     <head>
         <meta charset="UTF-8">
         <title>{{ pagename }} - Simple votings</title>
@@ -13,7 +11,6 @@
         {% block extra_css %} {% endblock %}
     </head>
 
-
     <body>
 
         <header>
@@ -21,22 +18,21 @@
         </header>
 
         <main role="main" class="container">
-            {% bootstrap_messages %}
-            {% block content %} {% endblock %}
+                    {% bootstrap_messages %}
+                    {% block content %} {% endblock %}
         </main>
 
         <footer class="footer">
             {% block footer %}
-                <div class="container text-right">
-                    <span class="text-muted">&copy; ШП, {% now "Y" %}</span>
-                </div>
+            <div class="container text-right">
+                <span class="text-muted">&copy; ШП, {% now "Y" %}</span>
+            </div>
             {% endblock %}
         </footer>
 
         {% block extra_js %}
-            {% bootstrap_javascript jquery='full' %}
+        {% bootstrap_javascript jquery='full' %}
         {% endblock %}
     </body>
-
 
 </html>
