@@ -35,5 +35,6 @@ urlpatterns = [
         ),
         name='login'
     ),
-    path('logout/', auth_views.LogoutView.as_view(), name='logout')
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('polls_feed/', views.polls_feed, name="polls_feed")
 ]
