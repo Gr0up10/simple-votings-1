@@ -25,6 +25,7 @@
           margin: 15px;
           background-color: #d1edf0;
           box-shadow: 5px 5px 2px 2px rgba(142,160,171,0.51);
+          margin-top: 40px;
         }
         .poll_description{
           font-weight: 300;
@@ -43,13 +44,61 @@
           width: 100%;
           box-shadow: 2px 2px 2px 1px rgba(142,160,171,0.51);
         }
+
+
+        .menu_container{
+          top: -10px;
+          width: 20%;
+          position: fixed;
+          margin: 20px;
+          padding: 10px;
+          color: #3c3c3c;
+        }
+        .menu_link{
+          margin: 10px;
+          text-align: left;
+          padding: 10px;
+          border-radius: 3px;
+          font-size: 1.5em;
+          width: 100%;
+          cursor: pointer;
+          transition: 0.1s;
+        }
+        .logout{
+          color: #646869;
+        }
+        .active_link{
+          background-color: #4fadc4;
+          color: #dae2e5;
+        }
+        .menu_link:hover{
+          box-shadow: inset 0px 0px 0px 2px #3c3c3c;
+        }
       </style>
 
     <title>Мои опросы</title>
   </head>
   <body>
 
+  <div class="menu_container">
+    <h2>PyVote</h2>
+      <div class="menu_link">Мой профиль</div>
+      <div class="menu_link active_link">Мои опросы</div>
+      <div class="menu_link">Создать опрос</div>
+      <div class="menu_link logout">Выйти</div>
+  </div>
+
   <div class="content_container">
+
+    <div class="card poll">
+      <div class="card-body">
+        <h2 class="card-title">Lorem</h2>
+        <p class="card-text poll_description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <button class="btn btn-primary vote" role="button">Choice 1</button>
+        <button class="btn btn-primary vote" role="button">Choice 2</button>
+        <button class="btn btn-primary vote" role="button">Choice 3</button>
+      </div>
+    </div>
 
     <div class="card poll">
       <div class="card-body">
