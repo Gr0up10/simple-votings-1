@@ -7,6 +7,7 @@ def get_menu_context():
     return [
         {'url_name': 'index', 'name': 'Главная'},
         {'url_name': 'time', 'name': 'Текущее время'},
+        {'url_name': 'polls_feed', 'name': 'Мои опросы'},
     ]
 
 
@@ -27,3 +28,8 @@ def time_page(request):
         'menu': get_menu_context()
     }
     return render(request, 'pages/time.html', context)
+
+
+def polls_feed(req):
+    context = {}
+    return render(req, 'pages/polls_feed.html', context)
