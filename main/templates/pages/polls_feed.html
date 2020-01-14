@@ -1,10 +1,15 @@
 {% extends 'base/base.html' %}
 
-
+{% load static %}
 {% block content %}
       <style>
         body {
           background-color: #b8d0d3;
+          background-image: url("../static/images/bg_pattern.jpg");
+          background-repeat: repeat;
+        }
+        p {
+          text-align: left;
         }
         .content_container{
           top: 0;
@@ -18,7 +23,7 @@
           text-align: left;
           width: 90%;
           margin: 15px;
-          background-color: #d1edf0;
+          background-color: #d2d9df;
           box-shadow: 5px 5px 2px 2px rgba(142,160,171,0.51);
           margin-top: 40px;
         }
@@ -27,7 +32,7 @@
           font-size: 1.2em
         }
         .vote{
-          margin: 10px 0px 10px 0px;
+          margin: 10px;
           text-align: left;
           color: #dae2e5;
           background-color: #4fadc4;
@@ -36,16 +41,39 @@
           border-radius: 10px;
           border-color: rgba(0, 0, 0, 0);
           font-size: 1.5em;
-          width: 100%;
+          width: 90%;
           box-shadow: 2px 2px 2px 1px rgba(142,160,171,0.51);
+        }
+        .vote-title{
+          font-size: 2.5em;
+          text-align: left;
+        }
+        .poll-bg{
+          background-color: #d2d9df;
+          padding: 15px;
+          background-size: cover, cover;
+          background-position: center center,center center;
+          width: 100%;
+        }
+        .poll-bg1{
+          background-image: linear-gradient(rgba(210, 217, 223, 0.5), #d2d9df), url("../static/images/poll-bg-3.jpg");
+        }
+        .poll-bg2{
+          background-image: linear-gradient(rgba(210, 217, 223, 0.5), #d2d9df), url("../static/images/poll-bg-4.jpg");
+        }
+        .card-body{
+          padding: 0;
+          text-align: center;
         }
       </style>
   <div class="content_container">
 
     <div class="card poll">
       <div class="card-body">
-        <h2 class="card-title">Lorem</h2>
-        <p class="card-text poll_description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <div class="poll-bg poll-bg1">
+          <h2 class="card-title vote-title">Lorem</h2>
+          <p class="card-text poll_description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        </div>
         <button class="btn btn-primary vote" role="button">Choice 1</button>
         <button class="btn btn-primary vote" role="button">Choice 2</button>
         <button class="btn btn-primary vote" role="button">Choice 3</button>
@@ -54,9 +82,10 @@
 
     <div class="card poll">
       <div class="card-body">
-        <h2 class="card-title">Lorem</h2>
-        <p class="card-text poll_description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-        <button class="btn btn-primary vote" role="button">Choice 1</button>
+        <div class="poll-bg poll-bg2">
+          <h2 class="card-title vote-title">Lorem</h2>
+          <p class="card-text poll_description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        </div><button class="btn btn-primary vote" role="button">Choice 1</button>
         <button class="btn btn-primary vote" role="button">Choice 2</button>
         <button class="btn btn-primary vote" role="button">Choice 3</button>
       </div>
