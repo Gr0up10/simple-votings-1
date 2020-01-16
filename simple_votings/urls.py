@@ -23,7 +23,7 @@ from main.views import get_menu_context
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index_page, name='index'),
+    path('', views.polls_feed, name='index'),
     path('time/', views.time_page, name='time'),
     path(
         'login/',
@@ -36,5 +36,5 @@ urlpatterns = [
         name='login'
     ),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
-    path('polls_feed/', views.polls_feed, name="polls_feed")
+    #path('', views.polls_feed, name="polls_feed")
 ]

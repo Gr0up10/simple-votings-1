@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+    {% load static %}
     {% load bootstrap4 %}
     <head>
         <meta charset="UTF-8">
@@ -9,6 +10,8 @@
         <link href="https://getbootstrap.com/docs/4.1/examples/sticky-footer-navbar/sticky-footer-navbar.css"
               rel="stylesheet">
         {% block extra_css %} {% endblock %}
+
+        <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
     </head>
 
     <body>
