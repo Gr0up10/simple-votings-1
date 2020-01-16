@@ -1,0 +1,28 @@
+.menu_container {
+    top: -10px;
+    width: 20%;
+    position: fixed;
+    margin: 20px;
+    padding: 10px;
+    color: #3c3c3c;
+}
+.menu_link {
+    margin: 10px;
+    text-align: left;
+    padding: 10px;
+    border-radius: 3px;
+    font-size: 1.5em;
+    width: 100%;
+    cursor: pointer;
+    transition: 0.1s;
+}
+.logout {
+    color: #646869;
+}
+.active_link {
+    background-color: #4fadc4;
+    color: #dae2e5;
+}
+.menu_link:hover {
+    box-shadow: inset 0px 0px 0px 2px #3c3c3c;
+}

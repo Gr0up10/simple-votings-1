@@ -1,80 +1,18 @@
-<style>
-        body {
-          background-color: #b8d0d3;
-          background-image: url("../static/images/bg_pattern.jpg");
-          background-repeat: repeat;
-        }
-    .menu_container{
-          top: -10px;
-          width: 20%;
-          position: fixed;
-          margin: 20px;
-          padding: 10px;
-          color: #3c3c3c;
-        }
-        .menu_link{
-          margin: 10px;
-          text-align: left;
-          padding: 10px;
-          border-radius: 3px;
-          font-size: 1.5em;
-          width: 100%;
-          cursor: pointer;
-          transition: 0.1s;
-        }
-        .logout{
-          color: #646869;
-        }
-        .active_link{
-          background-color: #4fadc4;
-          color: #dae2e5;
-        }
-        .menu_link:hover{
-          box-shadow: inset 0px 0px 0px 2px #3c3c3c;
-        }
-</style>
-
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'menu.css' %}">
 <nav>
     <div class="menu_container">
         <h2>PyVote</h2>
-          <div class="menu_link">Мой профиль</div>
-          <div class="menu_link active_link">Мои опросы</div>
-          <div class="menu_link">Создать опрос</div>
-          <div class="menu_link logout">Выйти</div>
+        {% if user.is_authenticated %}
+            {% for item in menu %}
+                {% if item.path == request.path %}
+                    <div class="menu_link active_link" onclick="location.href='{{ item.path }}';"> {{ item.name }}</div>
+                {% else %}
+                    <div class="menu_link" onclick="location.href='{{ item.path }}';"> {{ item.name }} </div>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            {% include 'registration/login.html'%}
+        {% endif%}
     </div>
 </nav>
-
-<!--
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-    <a class="navbar-brand" href="{% url 'index' %}">Simple votings</a>
-    <div class="collapse navbar-collapse" id="navbarCollapse">
-
-
-        <ul class="navbar-nav mr-auto">
-            {% block menu %}
-                {% for item in menu %}
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{% url item.url_name %}">{{ item.name }}</a>
-                    </li>
-                {% endfor %}
-            {% endblock %}
-        </ul>
-
-
-        <ul class="navbar-nav mr-1">
-            {% block usermenu %}
-                <li class="nav-item">
-                    {% if request.user.is_authenticated %}
-                        <a class="nav-link active" href="{% url 'logout' %}">Выйти</a>
-                    {% else %}
-                        <a class="nav-link active" href="{% url 'login' %}">Войти</a>
-                    {% endif %}
-                </li>
-            {% endblock %}
-        </ul>
-
-
-    </div>
-</nav>
-
--->

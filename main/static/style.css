@@ -1,63 +1,188 @@
+* {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+}
+
 body {
-  background-color: #b8d0d3;
-  background-image: url("images/bg_pattern.jpg");
-  background-repeat: repeat;
+    background-color: #b8d0d3;
+    background-image: url("images/bg_pattern.jpg");
+    background-repeat: repeat;
 }
 p {
-  text-align: left;
+    text-align: left;
 }
-.content_container{
-  top: 0;
-  width: 50vw;
-  margin: auto;
-  // background-color: black;
-  text-align: center
+.content_container {
+    top: 0;
+    width: 50vw;
+    margin: auto;
+    // background-color: black;
+    text-align: center
 }
-.poll{
-  top: -5vh;
-  text-align: left;
-  width: 90%;
-  margin: 15px;
-  background-color: #d2d9df;
-  box-shadow: 5px 5px 2px 2px rgba(142,160,171,0.51);
-  margin-top: 40px;
+.poll {
+    top: -5vh;
+    text-align: left;
+    width: 90%;
+    margin: 15px;
+    background-color: #d2d9df;
+    box-shadow: 5px 5px 2px 2px rgba(142,160,171,0.51);
+    margin-top: 40px;
 }
-.poll_description{
-  font-weight: 300;
-  font-size: 1.2em
+.poll_description {
+    font-weight: 300;
+    font-size: 1.2em;
 }
-.vote{
-  margin: 10px;
-  text-align: left;
-  color: #dae2e5;
-  background-color: #4fadc4;
-  padding: 10px;
-  padding-left: 20px;
-  border-radius: 10px;
-  border-color: rgba(0, 0, 0, 0);
-  font-size: 1.5em;
-  width: 90%;
-  box-shadow: 2px 2px 2px 1px rgba(142,160,171,0.51);
+.vote {
+    margin: 10px;
+    text-align: left;
+    color: #dae2e5;
+    background-color: #4fadc4;
+    padding: 10px;
+    padding-left: 20px;
+    border-radius: 10px;
+    border-color: rgba(0, 0, 0, 0);
+    font-size: 1.5em;
+    width: 90%;
+    box-shadow: 2px 2px 2px 1px rgba(142,160,171,0.51);
 }
-.vote-title{
-  font-size: 2.5em;
-  text-align: left;
+.vote-title {
+    font-size: 2.5em;
+    text-align: left;
 }
-.poll-bg{
-  background-color: #d2d9df;
-  padding: 15px;
-  background-size: cover, cover;
-  background-position: center center,center center;
-  width: 100%;
+.poll-bg {
+    background-color: #d2d9df;
+    padding: 15px;
+    background-size: cover, cover;
+    background-position: center center,center center;
+    width: 100%;
 }
-.poll-bg1{
-  background-image: linear-gradient(rgba(210, 217, 223, 0.5), #d2d9df), url("images/poll-bg-3.jpg");
+.poll-bg1 {
+    background-image: linear-gradient(rgba(210, 217, 223, 0.5), #d2d9df), url("images/poll-bg-3.jpg");
 }
-.poll-bg2{
-  background-image: linear-gradient(rgba(210, 217, 223, 0.5), #d2d9df), url("images/poll-bg-4.jpg");
+.poll-bg2 {
+    background-image: linear-gradient(rgba(210, 217, 223, 0.5), #d2d9df), url("images/poll-bg-4.jpg");
 }
-.poll-body{
-  padding: 0;
-  padding-bottom: 20px;
-  text-align: center;
+.poll-body {
+    padding: 0;
+    padding-bottom: 20px;
+    text-align: center;
+}
+body {
+    background-color: #b8d0d3;
+    background-image: url("../static/images/bg_pattern.jpg");
+    background-repeat: repeat;
+}
+
+.field {
+    margin-top: 13px;
+}
+
+.field > label {
+    display: block;
+    font-size: 14px;
+    color: #595959;
+    margin-bottom: 0;
+}
+
+.field > input {
+    padding-left: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background: #FBFBFB;
+    border-radius: 5px;
+    border:none;
+}
+
+input, select, textarea{
+    color: #242424;
+}
+
+/* Customize the label (the container) */
+.checkbox {
+    margin-top: 8px;
+    display: block;
+    position: relative;
+    padding-left: 28px;
+    cursor: pointer;
+    font-size: 18px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+    position: absolute;
+    top: 5px;
+    left: 0;
+    height: 17px;
+    width: 17px;
+    border: 1px solid #989898;
+    box-sizing: border-box;
+}
+
+/* On mouse-over, add a grey background color */
+.checkbox:hover input ~ .checkmark {
+    background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.checkbox input:checked ~ .checkmark {
+    background-color: rgba(0.5, 0.5, 0.5, 0.5);
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkbox:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the checkmark when checked */
+.checkbox input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* Style the checkmark/indicator */
+.checkbox .checkmark:after {
+    left: 0px;
+    top: 2px;
+    bottom: 2px;
+    width: 17px;
+    height: 17px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+}
+
+input[type=submit] {
+    background: rgba(134, 189, 120, 0.9);
+    border-radius: 5px;
+    color: #FBFBFB;
+    font-size: 20px;
+    width: 180px;
+}
+
+.singup {
+    background-color: #73ABC2 !important;
+}
+
+.login-fail {
+    background: #DF6868;
+    font-size: 14px;
+    line-height: 16px;
+    color: #F0EFEF;
+    width: 180px;
+    padding: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
