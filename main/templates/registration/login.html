@@ -1,26 +1,23 @@
-{% extends 'base/base.html' %}
-
-
-{% load bootstrap4 %}
-
-
-{% block content %}
-
-    <h1 class="mt-4">Авторизация (vasya-promprog)</h1>
-    <hr>
-
-    <div class="row">
-        <div class="col-4 offset-4">
-            <form action="{% url 'login' %}" method="POST">
-                {% csrf_token %}
-
-                {% bootstrap_form form %}
-                {% buttons %}
-                    <button type="submit" class="btn btn-primary float-right btn-block">Войти</button>
-                {% endbuttons %}
-            </form>
+<form method="post" action="/login/">
+    {% csrf_token %}
+    {% for field in login_form %}
+        <div class="field">
+            {{ field.errors }}
+            {{ field.label_tag }} {{ field }}
         </div>
-    </div>
-
-{% endblock %}
+    {% endfor %}
+    <label class="checkbox"> Remember me
+        <input name="remember_me" type="checkbox">
+        <span class="checkmark"></span>
+    </label>
+    {% if login_error %}
+        <div class="login-fail">
+            {{ login_error }}
+        </div>
+    {% endif %}
+    <p><input type="submit" value="Log in"/></p>
+</form>
+<form action="/register" method="get">
+    <input type="submit" value="Sing up" name="Submit" class="singup"/>
+</form>
 

@@ -23,18 +23,7 @@ from main.views import get_menu_context
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index_page, name='index'),
-    path('time/', views.time_page, name='time'),
-    path(
-        'login/',
-        auth_views.LoginView.as_view(
-            extra_context={
-                'menu': get_menu_context(),
-                'pagename': 'Авторизация'
-            }
-        ),
-        name='login'
-    ),
+    path('', views.index, name='index'),
+    path('login/', views.login_req, name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
-    path('polls_feed/', views.polls_feed, name="polls_feed")
 ]

@@ -1,35 +1,38 @@
 import datetime
 
-from django.shortcuts import render
+from django.contrib.auth.forms import AuthenticationForm
+from django.shortcuts import render, redirect
+from django.utils.translation import ugettext as _
+from django.contrib.auth import authenticate, login
 
 
 def get_menu_context():
     return [
-        {'url_name': 'index', 'name': 'Главная'},
-        {'url_name': 'time', 'name': 'Текущее время'},
-        {'url_name': 'polls_feed', 'name': 'Мои опросы'},
+        {'path': '/', 'name': _('Votings')},
+        {'path': 'profile', 'name': _('Profile')},
+        {'path': 'create_vote', 'name': _('Create voting')},
+        {'path': 'logout', 'name': _('Logout')},
     ]
 
 
-def index_page(request):
-    context = {
-        'pagename': 'Главная',
-        'author': 'Andrew',
-        'pages': 4,
-        'menu': get_menu_context()
-    }
-    return render(request, 'pages/index.html', context)
+def index(req, additional_context={}):
+    context = {**additional_context, 'menu': get_menu_context(), 'login_form': AuthenticationForm()}
 
-
-def time_page(request):
-    context = {
-        'pagename': 'Текущее время',
-        'time': datetime.datetime.now().time(),
-        'menu': get_menu_context()
-    }
-    return render(request, 'pages/time.html', context)
-
-
-def polls_feed(req):
-    context = {}
     return render(req, 'pages/polls_feed.html', context)
+
+
+def login_req(request):
+    if not request.POST:
+        return redirect('/')
+    username = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(request, username=username, password=password)
+    if user is not None:
+        if not request.POST.get('remember_me', None):
+            request.session.set_expiry(0)
+        login(request, user)
+    else:
+        return index(request, {'login_error': _('Username or password is incorrect')})
+
+    return redirect('/')
+
