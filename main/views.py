@@ -18,30 +18,26 @@ def get_menu_context():
 
 
 def index(req, additional_context={}):
-    context = {**additional_context, 'menu': get_menu_context(), 'login_form': AuthenticationForm(), "has_polls": False}
-    context["has_polls"] = True
-    context["polls"] = Voting.objects.all()
+    context = {**additional_context, 'menu': get_menu_context(), 'login_form': AuthenticationForm()}
+    polls = Voting.objects.all().prefetch_related("votes")
+    context["polls"] = polls
 
-    a = context["polls"].filter()[0]
-    a1 = VoteVariant.objects.filter()[0]
-
-    for i in context["polls"].filter():
-        vote_variants = VoteVariant.objects.filter(vote=i)
-        print(vote_variants)
-
-    return render(req, 'pages/polls_feed.html', context)
-
+    # v1 = VoteVariant(description="Котики")
+    # v2 = VoteVariant(description="Собачки")
+    # v1.save()
+    # v2.save()
     # vote = Voting(name="Котики или собачки?", description="Вопрос жизни и смерти.", finish_date=datetime.datetime.now(),
-    #               publish_date=datetime.datetime.now(),create_date=datetime.datetime.now(),author=req.user)
+    #               publish_date=datetime.datetime.now(), create_date=datetime.datetime.now(), author=req.user)
     # vote.save()
-    # VoteVariant(description="Котики", vote=vote).save()
-    # VoteVariant(description="Собачки", vote=vote).save()
-    #
+    # vote.votes.set([v1, v2])
+    # v1 = VoteVariant(description="Хомячки")
+    # v2 = VoteVariant(description="Зайчики")
+    # v1.save()
+    # v2.save()
     # vote = Voting(name="Зайчики или хомячки?", description="Вопрос жизни и смерти.", finish_date=datetime.datetime.now(),
-    #               publish_date=datetime.datetime.now(),create_date=datetime.datetime.now(),author=req.user)
+    #               publish_date=datetime.datetime.now(),create_date=datetime.datetime.now(), author=req.user)
     # vote.save()
-    # VoteVariant(description="Хомячки", vote=vote).save()
-    # VoteVariant(description="Зайчики", vote=vote).save()
+    # vote.votes.set([v1, v2])
     #
     # print("2 votes added")
     return render(req, 'pages/polls_feed.html', context)

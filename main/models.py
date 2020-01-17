@@ -4,6 +4,10 @@ from django.contrib.auth.models import User
 from django.db import models
 
 
+class VoteVariant(models.Model):
+    description = models.CharField(max_length=2000)
+
+
 class Voting(models.Model):
     VOTE_TYPES = (
         (1, 'Дискретный выбор'),
@@ -18,11 +22,7 @@ class Voting(models.Model):
     publish_date = models.DateTimeField()
     finish_date = models.DateTimeField()
     vtype = models.PositiveSmallIntegerField(choices=VOTE_TYPES, default=1)
-
-
-class VoteVariant(models.Model):
-    vote = models.ForeignKey(to=Voting, on_delete=models.CASCADE)
-    description = models.CharField(max_length=2000)
+    votes = models.ManyToManyField(VoteVariant)
 
 
 class VoteFact(models.Model):
