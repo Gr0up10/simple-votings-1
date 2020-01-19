@@ -4,6 +4,13 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect
 from django.utils.translation import ugettext as _
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
+from django.shortcuts import render
+
+#dbControl.save_vote() - saves given votes(or vote) to db.
+import main.db.db_control as dbControl
+
+
 
 from main.models import Voting, VoteVariant
 
