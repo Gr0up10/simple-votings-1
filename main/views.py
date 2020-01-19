@@ -19,7 +19,7 @@ def get_menu_context():
     return [
         {'path': '/', 'name': _('Votings')},
         {'path': 'profile', 'name': _('Profile')},
-        {'path': 'create_vote', 'name': _('Create voting')},
+        {'path': 'new_voting', 'name': _('Create voting')},
         {'path': 'logout', 'name': _('Logout')},
     ]
 
@@ -48,6 +48,12 @@ def index(req, additional_context={}):
     #
     # print("2 votes added")
     return render(req, 'pages/polls_feed.html', context)
+
+
+def new_voting(request):
+    contex = {'edit_voting': 'new'}
+
+    return index(request, contex)
 
 
 def login_req(request):

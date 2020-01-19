@@ -24,6 +24,7 @@ from main.views import get_menu_context
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
+    path('new_voting', views.new_voting, name='new_voting'),
     path('login/', views.login_req, name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout')
 ]
