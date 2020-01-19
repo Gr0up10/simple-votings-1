@@ -3,16 +3,18 @@
 <nav>
     <div class="menu_container">
         <h2>PyVote</h2>
-        {% if user.is_authenticated %}
-            {% for item in menu %}
-                {% if item.path == request.path %}
-                    <div class="menu_link active_link" onclick="location.href='{{ item.path }}';"> {{ item.name }}</div>
-                {% else %}
-                    <div class="menu_link" onclick="location.href='{{ item.path }}';"> {{ item.name }} </div>
-                {% endif %}
-            {% endfor %}
-        {% else %}
-            {% include 'registration/login.html'%}
-        {% endif%}
+        <div class="buttons">
+            {% if user.is_authenticated %}
+                {% for item in menu %}
+                    {% if item.path == request.path %}
+                        <div class="menu_link active_link" onclick="location.href='{{ item.path }}';"> {{ item.name }}</div>
+                    {% else %}
+                        <div class="menu_link" onclick="location.href='{{ item.path }}';"> {{ item.name }} </div>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                {% include 'registration/login.html'%}
+            {% endif%}
+        </div>
     </div>
 </nav>
