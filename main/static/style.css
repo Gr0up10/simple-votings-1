@@ -4,21 +4,27 @@
     font-weight: normal;
 }
 
+p {
+    color: #242424;
+}
+
 body {
     background-color: #b8d0d3;
     background-image: url("images/bg_pattern.jpg");
     background-repeat: repeat;
 }
+
 p {
     text-align: left;
 }
+
 .content_container {
     top: 0;
     width: 50vw;
     margin: auto;
-    // background-color: black;
     text-align: center
 }
+
 .poll {
     top: -5vh;
     text-align: left;
@@ -28,10 +34,12 @@ p {
     box-shadow: 5px 5px 2px 2px rgba(142,160,171,0.51);
     margin-top: 40px;
 }
+
 .poll_description {
     font-weight: 300;
     font-size: 1.2em;
 }
+
 .vote {
     margin: 10px;
     text-align: left;
@@ -45,10 +53,12 @@ p {
     width: 90%;
     box-shadow: 2px 2px 2px 1px rgba(142,160,171,0.51);
 }
+
 .vote-title {
     font-size: 2.5em;
     text-align: left;
 }
+
 .poll-bg {
     background-color: #d2d9df;
     padding: 15px;
@@ -56,17 +66,21 @@ p {
     background-position: center center,center center;
     width: 100%;
 }
+
 .poll-bg1 {
     background-image: linear-gradient(rgba(210, 217, 223, 0.5), #d2d9df), url("images/poll-bg-3.jpg");
 }
+
 .poll-bg2 {
     background-image: linear-gradient(rgba(210, 217, 223, 0.5), #d2d9df), url("images/poll-bg-4.jpg");
 }
+
 .poll-body {
     padding: 0;
     padding-bottom: 20px;
     text-align: center;
 }
+
 body {
     background-color: #b8d0d3;
     background-image: url("../static/images/bg_pattern.jpg");
@@ -185,4 +199,292 @@ input[type=submit] {
     padding: 5px;
     margin-top: 10px;
     margin-bottom: 10px;
+}
+
+.fill {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background: rgba(196, 196, 196, 0.8);
+}
+
+.centered {
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -80%);
+    width: 45vw;
+    margin: 15px;
+}
+
+.card-header {
+}
+
+.card-header > p {
+    display: inline-block;
+    font-size: 24px;
+    line-height: 28px;
+    color: #595959;
+}
+
+.card-header > p.selected {
+    font-weight: bold;
+}
+
+.horizontal-sep {
+    display: inline-block;
+    width: 1px;
+    height: 29px;
+    background-color: #595959;
+    transform: translateY(25%);
+    margin-left: 14px;
+    margin-right: 14px;
+}
+
+.edit-voting {
+    background: #FFFFFF;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 20px;
+}
+
+.text-field {
+    position: relative;
+    display: block;
+    margin-left: 32px;
+    margin-right: 32px;
+    margin-top: 15px;
+}
+
+p.label {
+    display: block;
+   //margin-left: 8px;
+    //margin-bottom: 3px;
+    font-size: 14px;
+    line-height: 16px;
+    //font-weight: bold;
+    color: #C7C4C4;
+
+}
+
+.input {
+    position: relative;
+}
+
+.input > input {
+    display: block;
+    width: 100%;
+    border: 1px solid #F0EFEF;
+    box-sizing: border-box;
+    border-radius: 5px;
+    padding-left: 8px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 18px;
+    line-height: 21px;
+    color: #5A5757;
+}
+
+.char-counter {
+    position: absolute;
+    right: 11px;
+    top: 50%;
+    transform: translate(0, -50%);
+    margin: 0px;
+    font-size: 14px;
+    line-height: 16px;
+    color: #BBBBBB;
+}
+
+.bottom {
+    top: unset;
+    bottom: 5px;
+}
+
+.text-area {
+    position: relative;
+    text-align: left;
+    padding-left: 8px;
+    width: 100%;
+    min-height: 70px;
+    border: 1px solid #F0EFEF;
+    box-sizing: border-box;
+    border-radius: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 18px;
+    line-height: 21px;
+    color: #5A5757;
+}
+
+.choices-list {
+    margin-top: 13px;
+    margin-left: 32px;
+    margin-right: 32px;
+}
+
+.button {
+    position: relative;
+    background: #7BC3E0;
+    border-radius: 8px;
+}
+
+.button > p {
+    text-align: left;
+    font-size: 18px;
+    line-height: 21px;
+    color: #FBFBFB;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-left: 10px;
+}
+
+.icon {
+    color: #595959;
+    top: 50%;
+    transform: translateY(-50%);
+    position: absolute;
+    right: 9px;
+}
+
+.icon.bin {
+    background-image: url("icons/bin.svg");
+    width: 28px;
+    height: 28px;
+}
+
+.icon.edit {
+    background-image: url("icons/edit.svg");
+    width: 25px;
+    height: 25px;
+    right: 48px;
+}
+
+.new-choice {
+    position: relative;
+    margin-top: -7px;
+}
+
+button.done {
+    display: inline-block;
+    width: 15%;
+    background: #7BC3E0;
+    border-radius: 8px;
+    border: none;
+    font-size: 18px;
+    line-height: 21px;
+    color: #FBFBFB;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.new-choice > .input {
+    position: relative;
+    display: inline-block;
+    width: 82%;
+    margin-right: 10px;
+}
+
+.button-icon {
+    position: relative;
+    display: inline-block;
+    float: left;
+    margin-top: 9px;
+    margin-bottom: 9px;
+    margin-left: 14px;
+    vertical-align: middle;
+}
+
+.plus {
+    background-image: url("icons/plus.svg");
+    width: 22px;
+    height: 22px;
+}
+
+.add.choice {
+    width: 100%;
+    display: inline-block;
+    margin-top: 7px;
+}
+
+.add.choice > p {
+    display: inline;
+    float: left;
+    margin-top: 9px;
+    margin-bottom: 9px;
+    padding: 0px;
+    vertical-align: middle;
+}
+
+.inline-elements {
+    display: inline;
+}
+
+.choice-type {
+    display: inline-block;
+    border: 1px solid #F0EFEF;
+    box-sizing: border-box;
+    border-radius: 5px;
+    float:left;
+}
+
+.choice-variant {
+    display: inline-block;
+    margin: 5px;
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
+.choice-variant.active {
+    background: #7BC3E0;
+    padding: 2px;
+    padding-left: 8px;
+    padding-right: 8px;
+    color: #FBFBFB;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.edit-image {
+    display: inline-block;
+    float:right;
+    padding-bottom: 0px;
+}
+
+.edit-image > p {
+    display: inline-block;
+    padding-bottom: 0px;
+    margin: 0px;
+    margin-left: 6px;
+    margin-right: 20px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.edit {
+    display: inline-block;
+    mask-image: url("icons/edit.svg");
+    -webkit-mask-image: url("icons/edit.svg");
+    width: 25px;
+    height: 25px;
+    background-color: #FBFBFB;
+}
+
+.label.choice {
+    margin-top: 10px;
+}
+
+.create {
+    background: #7BC3E0;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    line-height: 21px;
+    color: #FBFBFB;
+    float: right;
+    margin-top: 20px;
+    width: 33%;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }

@@ -1,6 +1,7 @@
 {% extends 'base/base.html' %}
 
 {% block content %}
+
   <div class="content_container">
 
     <div class="card poll">
@@ -26,5 +27,8 @@
       </div>
     </div>
 
+    {% if edit_voting %}
+      {% include 'base/edit_voting.html' %}
+    {% endif %}
   </div>
 {% endblock %}
