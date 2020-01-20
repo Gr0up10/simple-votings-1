@@ -1,16 +1,12 @@
 import datetime
 
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.shortcuts import render, redirect
 from django.utils.translation import ugettext as _
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.shortcuts import render
-
-#dbControl.save_vote() - saves given votes(or vote) to db.
 import main.db.db_control as dbControl
-
-
 
 from main.models import Voting, VoteVariant
 
@@ -29,24 +25,6 @@ def index(req, additional_context={}):
     polls = Voting.objects.all().prefetch_related("votes")
     context["polls"] = polls
 
-    # v1 = VoteVariant(description="Котики")
-    # v2 = VoteVariant(description="Собачки")
-    # v1.save()
-    # v2.save()
-    # vote = Voting(name="Котики или собачки?", description="Вопрос жизни и смерти.", finish_date=datetime.datetime.now(),
-    #               publish_date=datetime.datetime.now(), create_date=datetime.datetime.now(), author=req.user)
-    # vote.save()
-    # vote.votes.set([v1, v2])
-    # v1 = VoteVariant(description="Хомячки")
-    # v2 = VoteVariant(description="Зайчики")
-    # v1.save()
-    # v2.save()
-    # vote = Voting(name="Зайчики или хомячки?", description="Вопрос жизни и смерти.", finish_date=datetime.datetime.now(),
-    #               publish_date=datetime.datetime.now(),create_date=datetime.datetime.now(), author=req.user)
-    # vote.save()
-    # vote.votes.set([v1, v2])
-    #
-    # print("2 votes added")
     return render(req, 'pages/polls_feed.html', context)
 
 
@@ -70,3 +48,23 @@ def login_req(request):
         return index(request, {'login_error': _('Username or password is incorrect')})
 
     return redirect('/')
+
+
+def register_req(request):
+    if not request.POST:
+        return index(request, {'registration': True, 'registration_form': UserCreationForm()})
+
+    form = UserCreationForm(request.POST)
+    if request.POST.get('accept_terms', None) is None:
+        return index(request, {'login_error': _('You should agree with terms of use'),
+                               'registration': True, 'registration_form': form})
+    if form.is_valid():
+        form.save()
+        username = form.cleaned_data.get('username')
+        raw_password = form.cleaned_data.get('password1')
+        user = authenticate(username=username, password=raw_password)
+        login(request, user)
+        return redirect('/')
+    else:
+        return index(request, {'login_error': _('You filled fields incorrectly'),
+                               'registration': True, 'registration_form': form})

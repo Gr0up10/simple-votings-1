@@ -1,0 +1,26 @@
+<form method="post" action="/register/">
+    {% csrf_token %}
+    {% for field in registration_form %}
+        <div class="field">
+            {% if field.errors %}
+                <div class="login-fail">
+                    {{ field.errors }}
+                </div>
+            {% endif %}
+            {{ field.label_tag }} {{ field }}
+        </div>
+    {% endfor %}
+    <label class="checkbox"> Agree with terms of use
+        <input name="accept_terms" type="checkbox">
+        <span class="checkmark"></span>
+    </label>
+    {% if login_error %}
+        <div class="login-fail">
+            {{ login_error }}
+        </div>
+    {% endif %}
+    <p><input type="submit" value="Sing up"/></p>
+</form>
+<form action="/login" method="get">
+    <input type="submit" value="Log in" name="Submit" class="singup"/>
+</form>
