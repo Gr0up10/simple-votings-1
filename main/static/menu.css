@@ -32,3 +32,8 @@
 .menu_link:hover {
     box-shadow: inset 0px 0px 0px 2px #3c3c3c;
 }
+
+.g-recaptcha {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}

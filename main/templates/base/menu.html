@@ -13,7 +13,11 @@
                     {% endif %}
                 {% endfor %}
             {% else %}
-                {% include 'registration/login.html'%}
+                {% if registration %}
+                    {% include 'registration/registration.html'%}
+                {% else %}
+                    {% include 'registration/login.html'%}
+                {% endif %}
             {% endif%}
         </div>
     </div>
