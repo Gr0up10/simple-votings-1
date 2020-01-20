@@ -1,4 +1,6 @@
-import datetime
+from urllib import request as urlrequest
+from urllib import parse
+import json
 
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.shortcuts import render, redirect
@@ -9,6 +11,7 @@ from django.shortcuts import render
 import main.db.db_control as dbControl
 
 from main.models import Voting, VoteVariant
+from simple_votings import settings
 
 
 def get_menu_context():
@@ -51,14 +54,32 @@ def login_req(request):
 
 
 def register_req(request):
+    def render_error(form, error):
+        return index(request, {'login_error': error,
+                               'registration': True, 'registration_form': form})
+
     if not request.POST:
         return index(request, {'registration': True, 'registration_form': UserCreationForm()})
 
     form = UserCreationForm(request.POST)
     if request.POST.get('accept_terms', None) is None:
-        return index(request, {'login_error': _('You should agree with terms of use'),
-                               'registration': True, 'registration_form': form})
+        return render_error(form, _('You should agree with terms of use'))
     if form.is_valid():
+        # validate recaptcha
+        recaptcha_response = request.POST.get('g-recaptcha-response')
+        url = 'https://www.google.com/recaptcha/api/siteverify'
+        values = {
+            'secret': settings.GOOGLE_RECAPTCHA_SECRET_KEY,
+            'response': recaptcha_response
+        }
+
+        data = parse.urlencode(values).encode()
+        req = urlrequest.Request(url, data=data)
+        resp = urlrequest.urlopen(req)
+        result = json.load(resp)
+        if not result['success']:
+            return render_error(form, _('Recaptcha verification failed'))
+
         form.save()
         username = form.cleaned_data.get('username')
         raw_password = form.cleaned_data.get('password1')
@@ -66,5 +87,4 @@ def register_req(request):
         login(request, user)
         return redirect('/')
     else:
-        return index(request, {'login_error': _('You filled fields incorrectly'),
-                               'registration': True, 'registration_form': form})
+        return render_error(form, _('You filled fields incorrectly'))
