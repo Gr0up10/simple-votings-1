@@ -3,7 +3,7 @@
 {% block content %}
 
   <div class="content_container">
-
+    {% if has_polls %}
     {% for poll in polls %}
     <div class="card poll">
       <div class="poll-bg"></div>
@@ -28,9 +28,16 @@
           </div>
         </div>
       </div>
-
     </div>
     {% endfor %}
+
+      {% else %}
+        <div class="card">
+          <div class="card-body">
+            <h2>Не получилось достать опросы :(</h2>
+          </div>
+        </div>
+      {% endif %}
 
     {% if edit_voting %}
       {% include 'base/edit_voting.html' %}
