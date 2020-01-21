@@ -26,7 +26,11 @@ def get_menu_context():
 def index(req, additional_context={}):
     context = {**additional_context, 'menu': get_menu_context(), 'login_form': AuthenticationForm()}
     polls = Voting.objects.all().prefetch_related("votes")
-    context["polls"] = polls
+    if polls.exists():
+        context["has_polls"] = True
+        context["polls"] = polls
+    else:
+        context["has_polls"] = False
 
     return render(req, 'pages/polls_feed.html', context)
 
