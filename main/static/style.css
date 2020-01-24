@@ -38,6 +38,7 @@ p {
 }
 .profile_card{
     text-align: center;
+    padding: 5px 20px 0px 20px;
     width: 60%;
     background: rgba(115, 171, 194, 0.9);
     border-radius: 2px;
