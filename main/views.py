@@ -97,6 +97,8 @@ def register_req(request):
 def profile_page(request, additional_context={}):
     context = {**additional_context, 'menu': get_menu_context(), 'login_form': AuthenticationForm()}
     polls = Voting.objects.filter(author=request.user).prefetch_related("votes")
+    context["polls_amount"] = polls.count()
+    context["polls_liked"] = 0        # TODO: обновить после добавления функционала сохранения опросов
     if polls.exists():
         context["has_polls"] = True
         context["polls"] = polls

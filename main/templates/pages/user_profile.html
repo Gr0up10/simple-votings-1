@@ -6,13 +6,13 @@
 
     <div class="card poll profile_card">
         <div class="card-head">
-            <h1>User1</h1>
+            <h1>{{ request.user.username }}</h1>
         </div>
         <table class="table table-borderless">
           <thead>
             <tr>
-                <th scope="col"><h4>Созданных опросов: <b>123</b></h4></th>
-                <th scope="col"><h4>Сохраненных опросов: <b>321</b></h4></th>
+                <th scope="col"><h4>Созданных опросов: <b>{{polls_amount}}</b></h4></th>
+                <th scope="col"><h4>Сохраненных опросов: <b>{{polls_liked}}</b></h4></th>
             </tr>
           </thead>
        </table>
