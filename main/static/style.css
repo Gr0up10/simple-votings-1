@@ -34,6 +34,14 @@ p {
     border-radius: 20px;
     margin-top: 40px;
 }
+.profile_card{
+    background: rgba(115, 171, 194, 0.9);
+    border-radius: 2px;
+    box-shadow: none;
+}
+.profile_card *{
+    color: #D2D9DF;
+}
 
 .actions-btn {
     position: absolute;

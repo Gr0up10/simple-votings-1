@@ -19,7 +19,7 @@ def get_menu_context():
         {'path': '/', 'name': _('Votings')},
         {'path': 'profile', 'name': _('Profile')},
         {'path': 'new_voting', 'name': _('Create voting')},
-        {'path': 'logout', 'name': _('Logout')},
+        {'path': 'logout', 'name': _('Logout')}
     ]
 
 
@@ -92,3 +92,15 @@ def register_req(request):
         return redirect('/')
     else:
         return render_error(form, _('You filled fields incorrectly'))
+
+
+def profile_page(req):
+    context = {}
+    polls = Voting.objects.filter(author=req.user).prefetch_related("votes")
+    if polls.exists():
+        context["has_polls"] = True
+        context["polls"] = polls
+    else:
+        context["has_polls"] = False
+
+    return render(req, 'pages/user_profile.html', context)
