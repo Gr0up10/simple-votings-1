@@ -17,9 +17,9 @@ from simple_votings import settings
 def get_menu_context():
     return [
         {'path': '/', 'name': _('Votings')},
-        {'path': 'profile', 'name': _('Profile')},
-        {'path': 'new_voting', 'name': _('Create voting')},
-        {'path': 'logout', 'name': _('Logout')}
+        {'path': '/profile/', 'name': _('Profile')},
+        {'path': '/new_voting/', 'name': _('Create voting')},
+        {'path': '/logout/', 'name': _('Logout')}
     ]
 
 
@@ -94,13 +94,13 @@ def register_req(request):
         return render_error(form, _('You filled fields incorrectly'))
 
 
-def profile_page(req):
-    context = {}
-    polls = Voting.objects.filter(author=req.user).prefetch_related("votes")
+def profile_page(request, additional_context={}):
+    context = {**additional_context, 'menu': get_menu_context(), 'login_form': AuthenticationForm()}
+    polls = Voting.objects.filter(author=request.user).prefetch_related("votes")
     if polls.exists():
         context["has_polls"] = True
         context["polls"] = polls
     else:
         context["has_polls"] = False
 
-    return render(req, 'pages/user_profile.html', context)
+    return render(request, 'pages/user_profile.html', context)
