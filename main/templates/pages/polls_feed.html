@@ -3,10 +3,13 @@
 {% block content %}
 
   <div class="content_container">
+
     {% include 'base/poll_feed_base.html' %}
 
     {% if edit_voting %}
       {% include 'base/edit_voting.html' %}
     {% endif %}
+
   </div>
+
 {% endblock %}
