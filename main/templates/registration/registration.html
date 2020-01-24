@@ -1,4 +1,4 @@
-<form method="post" action="/register/">
+<form method="post" action="/register/" id="register-form">
     {% csrf_token %}
     {% for field in registration_form %}
         <div class="field">
@@ -14,15 +14,13 @@
         <input name="accept_terms" type="checkbox">
         <span class="checkmark"></span>
     </label>
-    {% if login_error %}
+    {% if error %}
         <div class="login-fail">
-            {{ login_error }}
+            {{ error }}
         </div>
     {% endif %}
     <script src='https://www.google.com/recaptcha/api.js'></script>
     <div class="g-recaptcha" data-sitekey="6LfmztAUAAAAADHG9um9MipePrcP9_DFuWrkjA3w"></div>
-    <p><input type="submit" value="Sing up"/></p>
+    <p><input type="button" onclick="register()" value="Sing up"/></p>
 </form>
-<form action="/login" method="get">
-    <input type="submit" value="Log in" name="Submit" class="singup"/>
-</form>
+<input type="button" value="Log in" onclick="show_login()" class="singup"/>

@@ -249,7 +249,7 @@ input, select, textarea{
     border-width: 0 3px 3px 0;
 }
 
-input[type=submit] {
+input[type=submit], input[type=button] {
     background: rgba(134, 189, 120, 0.9);
     border-radius: 5px;
     color: #FBFBFB;
