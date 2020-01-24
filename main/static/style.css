@@ -38,6 +38,7 @@ p {
 }
 .profile_card{
     text-align: center;
+    background: #73ABC2;
     padding: 5px 20px 0px 20px;
     width: 60%;
     background: rgba(115, 171, 194, 0.9);
@@ -45,12 +46,11 @@ p {
     box-shadow: none;
 }
 .profile_card *{
-    color: white;
+    color: #F0EFEF;
 }
 .vertical_line{
-    border: black 2px solid;
-    border-radius: 2px;
-    width: 3px;
+    border: black 1px solid;
+    width: 1px;
     height: 30px;
     margin-left: 10px;
     margin-right: 10px;
