@@ -28,5 +28,6 @@ urlpatterns = [
     path('element/<str:name>', views.element, name='element'),
     path('login/', views.login_req, name='login'),
     path('register/', views.register_req, name='register'),
-    path('logout/', auth_views.LogoutView.as_view(), name='logout')
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('profile/', views.profile_page, name='profile')
 ]
