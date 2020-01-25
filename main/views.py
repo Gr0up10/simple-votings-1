@@ -3,7 +3,9 @@ from urllib import parse
 import json
 
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
+from django.template.loader import render_to_string
 from django.utils.translation import ugettext as _
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
@@ -116,7 +118,7 @@ def register_req(request):
 
 def profile_page(request, additional_context={}):
     context = {**additional_context, 'menu': get_menu_context(), 'login_form': AuthenticationForm()}
-    polls = Voting.objects.filter(author=request.user).prefetch_related("votes")
+    polls = Voting.objects.filter(author=request.user).prefetch_related("votevariant_set")
     context["polls_amount"] = polls.count()
     context["polls_liked"] = 0        # TODO: обновить после добавления функционала сохранения опросов
     if polls.exists():
