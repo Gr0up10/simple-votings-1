@@ -2,14 +2,14 @@
 <link rel="stylesheet" type="text/css" href="{% static 'menu.css' %}">
 <nav>
     <div class="menu_container">
-        <h2>PyVote</h2>
+        <h2>PyVotings</h2>
         <div class="buttons">
             {% if user.is_authenticated %}
                 {% for item in menu %}
                     {% if item.path == request.path %}
-                        <div class="menu_link active_link" onclick="location.href='{{ item.path }}';"> {{ item.name }}</div>
+                        <div class="menu_link active_link" onclick="{{item.function}}()"> {{ item.name }}</div>
                     {% else %}
-                        <div class="menu_link" onclick="location.href='{{ item.path }}';"> {{ item.name }} </div>
+                        <div class="menu_link" onclick="{{item.function}}"> {{ item.name }} </div>
                     {% endif %}
                 {% endfor %}
             {% else %}

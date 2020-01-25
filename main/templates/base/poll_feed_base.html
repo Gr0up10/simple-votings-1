@@ -1,30 +1,30 @@
 {% if has_polls %}
-{% for poll in polls %}
-<div class="card poll">
-  <div class="poll-bg"></div>
-  <div class="actions-btn"></div>
-  <div class="card-body poll-body">
-    <div class="card-head">
-      <p class="card-title vote-title">{{poll.name}}</p>
-      <p class="card-text poll_description">{{poll.description}}</p>
-    </div>
-    {% for vote in poll.votes.all %}
-    <div class="btn btn-primary vote">{{vote.description}}</div>
-    {% endfor %}
-    <div class="card-bottom">
-      <p class="created-by">Created by: <span class="author">{{poll.author}}</span></p>
-      <div class="stat">
-        <p>40</p>
-        <div class="vote-icon stat-icon"></div>
+  {% for poll in polls %}
+    <div class="card poll">
+      <div class="poll-bg"></div>
+      <div class="actions-btn"></div>
+      <div class="card-body poll-body">
+        <div class="card-head">
+          <p class="card-title vote-title">{{poll.name}}</p>
+          <p class="card-text poll_description">{{poll.description}}</p>
+        </div>
+        {% for vote in poll.votevariant_set.all %}
+        <div class="btn btn-primary vote">{{vote.name}}</div>
+        {% endfor %}
+        <div class="card-bottom">
+          <p class="created-by">Created by: <span class="author">User1</span></p>
+          <div class="stat">
+            <p>40</p>
+            <div class="vote-icon stat-icon"></div>
+          </div>
+          <div class="stat">
+            <p>300</p>
+            <div class="view-icon stat-icon"></div>
+          </div>
+        </div>
       </div>
-      <div class="stat">
-        <p>300</p>
-        <div class="view-icon stat-icon"></div>
-      </div>
     </div>
-  </div>
-</div>
-{% endfor %}
+  {% endfor %}
 
 {% else %}
   <div class="card">
