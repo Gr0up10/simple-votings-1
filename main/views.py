@@ -3,7 +3,7 @@ from urllib import parse
 import json
 
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseBadRequest
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext as _
@@ -27,7 +27,7 @@ def get_menu_context():
 
 def index(req):
     context = {'menu': get_menu_context(), 'login_form': AuthenticationForm()}
-    polls = Voting.objects.all().prefetch_related("votes")
+    polls = Voting.objects.prefetch_related("votevariant_set").all()
     if polls.exists():
         context["has_polls"] = True
         context["polls"] = polls
@@ -37,7 +37,28 @@ def index(req):
     return render(req, 'pages/polls_feed.html', context)
 
 
+def element(request, name):
+    name_map = {'new_voting_choice': 'new_voting_choice.html',
+                'voting_choice': 'voting_choice.html'}
+    if name not in name_map:
+        return HttpResponseBadRequest()
+
+    return render(request, f"elements/{name_map[name]}")
+
+
 def new_voting(request):
+    print(request, request.POST)
+    if request.POST:
+        print(request.POST)
+        data = json.loads(request.POST['data'])
+        model = Voting(name=data['title'], description=data['description'], author=request.user, vtype=data['choice_type'])
+        model.save()
+
+        for choice in data['choices']:
+            VoteVariant(voting=model, name=choice['text']).save()
+
+        return JsonResponse({'success': True})
+
     return render(request, 'base/edit_voting.html')
 
 

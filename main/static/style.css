@@ -327,6 +327,7 @@ input[type=submit], input[type=button] {
     position: absolute;
     right: 0px;
     top: 20px;
+    cursor: pointer;
 }
 
 .text-field {
@@ -404,10 +405,17 @@ p.label {
     margin-right: 32px;
 }
 
+.edit-footer {
+    margin-top: 13px;
+    margin-left: 32px;
+    margin-right: 32px;
+}
+
 .button {
     position: relative;
     background: #7BC3E0;
     border-radius: 8px;
+    border: none;
 }
 
 .button > p {
@@ -417,7 +425,12 @@ p.label {
     color: #FBFBFB;
     padding-top: 10px;
     padding-bottom: 10px;
+    margin: 0px;
     margin-left: 10px;
+}
+
+.choice {
+    margin-top: 7px;
 }
 
 .icon {
@@ -432,6 +445,7 @@ p.label {
     background-image: url("icons/bin.svg");
     width: 28px;
     height: 28px;
+    cursor: pointer;
 }
 
 .icon.edit {
@@ -439,11 +453,12 @@ p.label {
     width: 25px;
     height: 25px;
     right: 48px;
+    cursor: pointer;
 }
 
 .new-choice {
     position: relative;
-    margin-top: -7px;
+    margin-top: 7px;
 }
 
 button.done {
@@ -514,6 +529,7 @@ button.done {
     margin: 5px;
     margin-left: 8px;
     margin-right: 8px;
+    cursor: pointer;
 }
 
 .choice-variant.active {
@@ -524,6 +540,7 @@ button.done {
     color: #FBFBFB;
     margin-left: 5px;
     margin-right: 5px;
+    cursor: default;
 }
 
 .edit-image {

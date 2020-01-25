@@ -4,25 +4,25 @@ from django.contrib.auth.models import User
 from django.db import models
 
 
-class VoteVariant(models.Model):
-    description = models.CharField(max_length=2000)
-
-
 class Voting(models.Model):
     VOTE_TYPES = (
         (1, 'Дискретный выбор'),
         (2, 'Один из многих'),
         (3, 'Несколько из многих'),
     )
-    name = models.CharField(max_length=200)
-    description = models.CharField(max_length=2000)
+    name = models.CharField(max_length=100)
+    description = models.CharField(max_length=500)
     author = models.ForeignKey(to=User, on_delete=models.CASCADE)
     image = models.ImageField(null=True)
     create_date = models.DateTimeField(default=datetime.datetime.now)
-    publish_date = models.DateTimeField()
-    finish_date = models.DateTimeField()
+    # publish_date = models.DateTimeField()
+    # finish_date = models.DateTimeField()
     vtype = models.PositiveSmallIntegerField(choices=VOTE_TYPES, default=1)
-    votes = models.ManyToManyField(VoteVariant)
+
+
+class VoteVariant(models.Model):
+    name = models.CharField(max_length=100)
+    voting = models.ForeignKey(to=Voting, on_delete=models.CASCADE)
 
 
 class VoteFact(models.Model):
