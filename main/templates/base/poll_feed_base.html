@@ -1,7 +1,11 @@
 {% if has_polls %}
   {% for poll in polls %}
     <div class="card poll">
-      <div class="poll-bg"></div>
+      {% if poll.image %}
+        <div class="poll-bg" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(210, 217, 223, 0.96) 61%), url({{ poll.image.url }});"></div>
+      {% else %}
+        <div class="poll-bg" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(210, 217, 223, 0.96) 61%), url();"></div>
+      {% endif %}
       <div class="actions-btn"></div>
       <div class="card-body poll-body">
         <div class="card-head">

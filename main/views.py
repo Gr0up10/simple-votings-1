@@ -19,6 +19,8 @@ from main.models import Voting, VoteVariant
 from main.validation import validate_voting
 from simple_votings import settings
 
+from PIL import Image, UnidentifiedImageError
+
 
 def get_menu_context():
     return [
@@ -51,16 +53,29 @@ def element(request, name):
 
 
 def new_voting(request):
+    def create_error(error):
+        return JsonResponse({
+            'success': False,
+            'error': render_to_string('registration/form_error.html', {'error': error})
+        })
+
     if request.POST:
+        img = None
+        if 'image' in request.FILES:
+            try:
+                img = Image.open(request.FILES['image'])
+                #if not img.verify():
+                #    return create_error(_('Image is corrupted'))
+            except UnidentifiedImageError:
+                return create_error(_('File should be image'))
         data = json.loads(request.POST['data'])
         er = validate_voting(data)
         if er:
-            return JsonResponse({
-                'success': False,
-                'error': render_to_string('registration/form_error.html', {'error': er})
-            })
+            return create_error(er)
 
         model = Voting(name=data['title'], description=data['description'], author=request.user, vtype=data['choice_type'])
+        if 'image' in request.FILES:
+            model.image = request.FILES['image']
         model.save()
 
         for choice in data['choices']:
@@ -131,8 +146,8 @@ def change_language(request):
         return render(request, 'elements/languages.html')
 
     lang = request.POST['language']
-    #if lang != 'ru' and lang != 'en':
-    #    return HttpResponseBadRequest()
+    if lang != 'ru' and lang != 'en':
+        return HttpResponseBadRequest()
 
     translation.activate(lang)
     response = HttpResponse()

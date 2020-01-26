@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', function(){
 choices = [];
 choice_type = 0;
 
-
 function add_new_choice() {
     if (!isEmpty(choices) && choices[last(choices)]['new']===true) return;
     let id = !isEmpty(choices) ? parseInt(last(choices))+1 : 0
@@ -71,22 +70,21 @@ function submit_voting() {
             value['text'] = $('#'+key.toString()).children('.input').children('input').val()
         }
     }
-    $.ajax({
-        type: "POST",
-        url: "/new_voting/",
-        data: {
-            'data':JSON.stringify({
-                'title': $('.title-input').val(),
-                'description': $('.desc-input').val(),
-                'choices': choices.map(c => c['text']),
-                'choice_type': choice_type
-            }),
-            'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
-        },
-        success: (data) => {
-            if('error' in data) $('.error-container').html(data['error']);
+    var http = new XMLHttpRequest();
+    var url = '/new_voting/';
+    http.open('POST', url, true);
+    http.setRequestHeader('X-CSRFToken', $('input[name="csrfmiddlewaretoken"]').val())
+    http.onload  = function() {
+       var data = JSON.parse(http.response);
+       if('error' in data) $('.error-container').html(data['error']);
             else close_voting_editing();
-        },
-        failure: (errMsg) => alert(errMsg)
-    });
+    };
+    var form_data = new FormData($('#image-loader')[0]);
+    form_data.append('data', JSON.stringify({
+                                    'title': $('.title-input').val(),
+                                    'description': $('.desc-input').val(),
+                                    'choices': choices.map(c => c['text']),
+                                    'choice_type': choice_type
+                                }))
+    http.send(form_data);
 }
