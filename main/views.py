@@ -3,17 +3,23 @@ from urllib import parse
 import json
 
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseBadRequest, HttpResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
-from django.utils.translation import ugettext as _
+from django.utils import translation
+from django.utils.translation import ugettext as _, get_language
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
+
 import main.db.db_control as dbControl
 
 from main.models import Voting, VoteVariant
+from main.validation import validate_voting
 from simple_votings import settings
+
+from PIL import Image, UnidentifiedImageError
 
 
 def get_menu_context():
@@ -47,15 +53,33 @@ def element(request, name):
 
 
 def new_voting(request):
-    print(request, request.POST)
+    def create_error(error):
+        return JsonResponse({
+            'success': False,
+            'error': render_to_string('registration/form_error.html', {'error': error})
+        })
+
     if request.POST:
-        print(request.POST)
+        img = None
+        if 'image' in request.FILES:
+            try:
+                img = Image.open(request.FILES['image'])
+                #if not img.verify():
+                #    return create_error(_('Image is corrupted'))
+            except UnidentifiedImageError:
+                return create_error(_('File should be image'))
         data = json.loads(request.POST['data'])
+        er = validate_voting(data)
+        if er:
+            return create_error(er)
+
         model = Voting(name=data['title'], description=data['description'], author=request.user, vtype=data['choice_type'])
+        if 'image' in request.FILES:
+            model.image = request.FILES['image']
         model.save()
 
         for choice in data['choices']:
-            VoteVariant(voting=model, name=choice['text']).save()
+            VoteVariant(voting=model, name=choice).save()
 
         return JsonResponse({'success': True})
 
@@ -114,6 +138,21 @@ def register_req(request):
         return JsonResponse({'success': True})
     else:
         return render_error(form, _('You filled fields incorrectly'))
+
+
+@csrf_exempt
+def change_language(request):
+    if not request.POST:
+        return render(request, 'elements/languages.html')
+
+    lang = request.POST['language']
+    if lang != 'ru' and lang != 'en':
+        return HttpResponseBadRequest()
+
+    translation.activate(lang)
+    response = HttpResponse()
+    response.set_cookie(settings.LANGUAGE_COOKIE_NAME, lang)
+    return response
 
 
 def profile_page(request, additional_context={}):

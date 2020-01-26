@@ -1,7 +1,10 @@
 <!DOCTYPE html>
+
 <html lang="en">
     {% load static %}
     {% load bootstrap4 %}
+    {% load i18n %}
+
     <head>
         <meta charset="UTF-8">
         <title>{{ pagename }} - Simple votings</title>
@@ -19,6 +22,7 @@
     <body>
         <header>
             {% include 'base/menu.html' %}
+            {% include 'elements/languages.html'%}
         </header>
 
         <main role="main" class="container">
@@ -29,7 +33,7 @@
         <footer class="footer">
             {% block footer %}
             <div class="container text-right">
-                <span class="text-muted">&copy; ШП, {% now "Y" %}</span>
+                <span class="text-muted">&copy; {% trans "SP" %}, {% now "Y" %}</span>
             </div>
             {% endblock %}
         </footer>

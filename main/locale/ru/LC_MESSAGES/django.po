@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-16 18:53+0300\n"
+"POT-Creation-Date: 2020-01-26 20:56+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,18 +20,151 @@ msgstr ""
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
 "%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: main/views.py:11
+#: main/templates/404.html:6
+msgid "Page not found"
+msgstr "Упс... Кажется, страница не найдена..."
+
+#: main/templates/base/base.html:34
+msgid "SP"
+msgstr "ШП"
+
+#: main/templates/base/edit_voting.html:4
+msgid "Edit"
+msgstr "Редактировать"
+
+#: main/templates/base/edit_voting.html:6
+msgid "Preview"
+msgstr "Посмотреть"
+
+#: main/templates/base/edit_voting.html:13
+#| msgid "Title field"
+msgid "Title"
+msgstr "Заголовок"
+
+#: main/templates/base/edit_voting.html:20
+#| msgid "Description field"
+msgid "Description"
+msgstr "Описание"
+
+#: main/templates/base/edit_voting.html:25
+msgid "Choices"
+msgstr "Варианты выбора"
+
+#: main/templates/base/edit_voting.html:28
+msgid "Add new choice"
+msgstr "Добавить новый вариант"
+
+#: main/templates/base/edit_voting.html:32
+msgid "Choice type"
+msgstr "Тип выбора"
+
+#: main/templates/base/edit_voting.html:35
+msgid "Single"
+msgstr "Одиночный"
+
+#: main/templates/base/edit_voting.html:36
+msgid "Multiple"
+msgstr "Несколко"
+
+#: main/templates/base/edit_voting.html:40
+msgid "Edit background image"
+msgstr "Выбрать картинку"
+
+#: main/templates/base/edit_voting.html:47
+msgid "CREATE"
+msgstr "СОЗДАТЬ"
+
+#: main/templates/elements/new_voting_choice.html:6
+msgid "Done"
+msgstr "Ок"
+
+#: main/templates/pages/polls_feed.html:10
+msgid "Fail to load votings"
+msgstr "Не получилось достать опросы :("
+
+#: main/templates/pages/user_profile.html:14
+#| msgid "Create voting"
+msgid "Created votings: "
+msgstr "Созданных опросов: "
+
+#: main/templates/pages/user_profile.html:15
+#| msgid "Create voting"
+msgid "Liked votings: "
+msgstr "Сохраненных опросов: "
+
+#: main/templates/pages/user_profile.html:24
+#| msgid "Votings"
+msgid "My votings"
+msgstr "Мои голосования"
+
+#: main/templates/pages/user_profile.html:28
+#| msgid "Create voting"
+msgid "Saved votings"
+msgstr "Сохранненые голосования"
+
+#: main/templates/registration/login.html:9
+msgid "Remember me"
+msgstr "Запомнить меня"
+
+#: main/templates/registration/login.html:14
+#: main/templates/registration/registration.html:26
+msgid "Log in"
+msgstr "Войти"
+
+#: main/templates/registration/login.html:16
+#: main/templates/registration/registration.html:24
+msgid "Sing up"
+msgstr "Зарегестрироваться"
+
+#: main/templates/registration/registration.html:13
+#| msgid "You should agree with terms of use"
+msgid "Agree with terms of use"
+msgstr "Вы должны согласится с правилами использования"
+
+#: main/validation.py:26
+msgid "Title field"
+msgstr "Поле заголовка"
+
+#: main/validation.py:29
+msgid "Description field"
+msgstr "Поля описания"
+
+#: main/validation.py:34
+msgid "There are should be at least two choices"
+msgstr "В голосовании должно быть как минимум два выбора"
+
+#: main/validation.py:37
+msgid "Choice type should be binary"
+msgstr "Вид выбора должен быть бинарный"
+
+#: main/views.py:25
 msgid "Votings"
 msgstr "Голосования"
 
-#: main/views.py:12
+#: main/views.py:26
 msgid "Profile"
 msgstr "Мой профиль"
 
-#: main/views.py:13
+#: main/views.py:27
 msgid "Create voting"
 msgstr "Создать новое голосование"
 
-#: main/views.py:35
+#: main/views.py:28
+msgid "Logout"
+msgstr "Выйти"
+
+#: main/views.py:88
 msgid "Username or password is incorrect"
 msgstr "Имя пользователя или пароль неверны"
+
+#: main/views.py:101
+msgid "You should agree with terms of use"
+msgstr "Вы должны согласится с правилами использования"
+
+#: main/views.py:116
+msgid "Recaptcha verification failed"
+msgstr "Recaptcha введена неверно"
+
+#: main/views.py:125
+msgid "You filled fields incorrectly"
+msgstr "Вы заполнили поля неверно"

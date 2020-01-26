@@ -2,10 +2,10 @@ function show_error(error) {
     console.log(error);
 }
 
-function render_in(url, selector) {
+function render_in(url, selector, callback) {
     $.ajax({
         url: url,
-        success: (data) => { $(selector).html(data);},
+        success: (data) => { $(selector).html(data); if(callback) callback();},
     });
 }
 
@@ -61,7 +61,7 @@ function show_login() {
 }
 
 function show_voting_creation() {
-    render_in('/new_voting/', '.popups')
+    render_in('/new_voting/', '.popups', ()=> $(".centered").addClass('show-top-anim'))
 }
 
 function isEmpty(obj) {
@@ -70,4 +70,16 @@ function isEmpty(obj) {
 
 function last(obj) {
     return Object.keys(obj)[Object.keys(obj).length - 1]
+}
+
+function change_language(lang) {
+    console.log(lang)
+    $.ajax({
+        type: "POST",
+        url: '/change_language/',
+        data: {'language': lang},
+        success: (data) => {
+            location.reload();
+        },
+    });
 }
