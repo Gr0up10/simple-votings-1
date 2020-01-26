@@ -628,6 +628,15 @@ button.done {
     overflow: hidden;
 }
 
+.edit-image > .label {
+    float: left;
+}
+
+.edit-image > #image-loader > input {
+    border: 1px solid #F0EFEF;
+    border-radius: 5px;
+}
+
 .edit {
     display: inline-block;
     mask-image: url("icons/edit.svg");
@@ -668,3 +677,4 @@ button.done {
     margin: 5px;
     cursor: pointer;
 }
+
