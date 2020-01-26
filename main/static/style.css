@@ -197,6 +197,7 @@ body {
     background: #FBFBFB;
     border-radius: 5px;
     border:none;
+    width: 100%;
 }
 
 input, select, textarea{
@@ -275,7 +276,7 @@ input[type=submit], input[type=button] {
     border-radius: 5px;
     color: #FBFBFB;
     font-size: 20px;
-    width: 180px;
+    width: 100%;
 }
 
 .singup {
@@ -654,4 +655,17 @@ button.done {
     width: 33%;
     padding-top: 10px;
     padding-bottom: 10px;
+}
+
+.lang-container {
+    position: fixed;
+    right: 20px;
+    bottom: 30px;
+}
+
+.language-icon {
+    width: 25px;
+    height: 25px;
+    margin: 5px;
+    cursor: pointer;
 }

@@ -1,5 +1,5 @@
 {% extends 'base/base.html' %}
-
+{% load i18n %}
 {% block content %}
 
 <div class="content_container">
@@ -11,8 +11,8 @@
         <table class="table table-borderless">
           <thead>
             <tr>
-                <th scope="col"><h4>Созданных опросов: <b>{{polls_amount}}</b></h4></th>
-                <th scope="col"><h4>Сохраненных опросов: <b>{{polls_liked}}</b></h4></th>
+                <th scope="col"><h4>{% trans "Created votings" %}<b>{{polls_amount}}</b></h4></th>
+                <th scope="col"><h4>{% trans "Liked votings" %}<b>{{polls_liked}}</b></h4></th>
             </tr>
           </thead>
        </table>
@@ -21,11 +21,11 @@
     <div class="container">
       <div class="row justify-content-md-center">
         <div class="col col-lg-4">
-            <h3 class="text-right font-weight-bolder">Мои опросы</h3>
+            <h3 class="text-right font-weight-bolder">{% trans "My votings" %}</h3>
         </div>
         <div class="vertical_line"></div>
         <div class="col col-lg-4">
-            <h3 class="text-left">Сохраненные опросы</h3>
+            <h3 class="text-left">{% trans "Saved votings" %}</h3>
         </div>
       </div>
     <br><br>

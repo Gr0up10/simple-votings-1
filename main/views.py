@@ -3,13 +3,16 @@ from urllib import parse
 import json
 
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from django.http import JsonResponse, HttpResponseBadRequest
+from django.http import JsonResponse, HttpResponseBadRequest, HttpResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
-from django.utils.translation import ugettext as _
+from django.utils import translation
+from django.utils.translation import ugettext as _, get_language
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
+
 import main.db.db_control as dbControl
 
 from main.models import Voting, VoteVariant
@@ -120,6 +123,21 @@ def register_req(request):
         return JsonResponse({'success': True})
     else:
         return render_error(form, _('You filled fields incorrectly'))
+
+
+@csrf_exempt
+def change_language(request):
+    if not request.POST:
+        return render(request, 'elements/languages.html')
+
+    lang = request.POST['language']
+    #if lang != 'ru' and lang != 'en':
+    #    return HttpResponseBadRequest()
+
+    translation.activate(lang)
+    response = HttpResponse()
+    response.set_cookie(settings.LANGUAGE_COOKIE_NAME, lang)
+    return response
 
 
 def profile_page(request, additional_context={}):

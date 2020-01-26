@@ -1,3 +1,4 @@
+{% load i18n %}
 <form method="post" action="/login/" id="login-form">
     {% csrf_token %}
     {% for field in login_form %}
@@ -6,12 +7,12 @@
             {{ field.label_tag }} {{ field }}
         </div>
     {% endfor %}
-    <label class="checkbox"> Remember me
+    <label class="checkbox"> {% trans "Remember me" %}
         <input name="remember_me" type="checkbox">
         <span class="checkmark"></span>
     </label>
     <div class="error-container"></div>
-    <p><input type="button" onclick="login()" value="Log in"/></p>
+    <p><input type="button" onclick="login()" value="{% trans 'Log in' %}"/></p>
 </form>
-<input type="button" value="Sing up" onclick="show_registration()" class="singup"/>
+<input type="button" value="{% trans 'Sing up' %}" onclick="show_registration()" class="singup"/>
 

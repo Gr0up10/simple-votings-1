@@ -71,3 +71,15 @@ function isEmpty(obj) {
 function last(obj) {
     return Object.keys(obj)[Object.keys(obj).length - 1]
 }
+
+function change_language(lang) {
+    console.log(lang)
+    $.ajax({
+        type: "POST",
+        url: '/change_language/',
+        data: {'language': lang},
+        success: (data) => {
+            location.reload();
+        },
+    });
+}
