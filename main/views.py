@@ -3,7 +3,7 @@ from urllib import parse
 import json
 
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseBadRequest
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext as _
@@ -47,9 +47,7 @@ def element(request, name):
 
 
 def new_voting(request):
-    print(request, request.POST)
     if request.POST:
-        print(request.POST)
         data = json.loads(request.POST['data'])
         model = Voting(name=data['title'], description=data['description'], author=request.user, vtype=data['choice_type'])
         model.save()

@@ -2,10 +2,10 @@ function show_error(error) {
     console.log(error);
 }
 
-function render_in(url, selector) {
+function render_in(url, selector, callback) {
     $.ajax({
         url: url,
-        success: (data) => { $(selector).html(data);},
+        success: (data) => { $(selector).html(data); if(callback) callback();},
     });
 }
 
@@ -61,7 +61,7 @@ function show_login() {
 }
 
 function show_voting_creation() {
-    render_in('/new_voting/', '.popups')
+    render_in('/new_voting/', '.popups', ()=> $(".centered").addClass('show-top-anim'))
 }
 
 function isEmpty(obj) {

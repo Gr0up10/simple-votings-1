@@ -49,7 +49,9 @@ function edit_voting() {
 }
 
 function close_voting_editing() {
-    $('.popups').html('')
+    $('.centered').addClass('hide-top-anim');
+    setTimeout(()=>$('.popups').html(''), 400)
+
 }
 
 function choice_type_change() {

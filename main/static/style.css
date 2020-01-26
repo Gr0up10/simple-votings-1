@@ -304,10 +304,54 @@ input[type=submit], input[type=button] {
 
 .centered {
     position: absolute;
-    top: 50%;
-    transform: translate(0, -80%);
+    top: 10px;
     width: 45vw;
     margin: 15px;
+}
+
+.show-top-anim {
+  animation: top-anim 0.5s;
+}
+
+.hide-top-anim {
+  animation: hide-anim 0.5s;
+}
+
+@keyframes top-anim {
+  0% {
+    -webkit-transform: translate(0, -50%);
+    -moz-transform: translate(0, -50%);
+    -o-transform: translate(0, -50%);
+    -ms-transform: translate(0, -50%);
+    transform: translate(0, -50%);
+  }
+
+  80% {
+    -webkit-transform: translate(0, 0%);
+    -moz-transform: translate(0, 0%);
+    -o-transform: translate(0, 0%);
+    -ms-transform: translate(0, 0%);
+    transform: translate(0, 0%);
+  }
+}
+
+@keyframes hide-anim {
+  0% {
+    -webkit-transform: translate(0, 0%);
+    -moz-transform: translate(0, 0%);
+    -o-transform: translate(0, 0%);
+    -ms-transform: translate(0, 0%);
+    transform: translate(0, 0%);
+  }
+
+  80% {
+    -webkit-transform: translate(0, -50%);
+    -moz-transform: translate(0, -50%);
+    -o-transform: translate(0, -50%);
+    -ms-transform: translate(0, -50%);
+    transform: translate(0, -50%);
+    opacity: 0%;
+  }
 }
 
 .card-header {
