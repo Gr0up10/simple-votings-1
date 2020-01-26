@@ -13,14 +13,14 @@ choice_type = 0;
 function add_new_choice() {
     if (!isEmpty(choices) && choices[last(choices)]['new']===true) return;
     let id = !isEmpty(choices) ? parseInt(last(choices))+1 : 0
-    choices[id] = ({'new': true});
+    choices[id] = ({'new': true, 'finished': false});
     get_element('new_voting_choice', el => $(el).insertBefore('.add.choice').attr('id', id));
 }
 
 function done_choice_editing() {
     let element = $(event.target).parent();
     let text = element.children('.input').children('input').val();
-    choices[element.attr('id')] = {'new': false, 'text': text}
+    choices[element.attr('id')] = {'new': false, 'finished': true, 'text': text}
     get_element('voting_choice', el => {
         let new_el = $(el);
         element.replaceWith(new_el);
@@ -38,6 +38,7 @@ function delete_voting() {
 function edit_voting() {
     let prev_element = $(event.target).parent();
     get_element('new_voting_choice', el => {
+        choices[id]['finished'] = false
         let element = $(el);
         let id = prev_element.attr('id');
         prev_element.replaceWith(element);
@@ -65,22 +66,27 @@ function choice_type_change() {
 }
 
 function submit_voting() {
-console.log($('input[name="csrfmiddlewaretoken"]').val())
+    for (const [ key, value ] of Object.entries(choices)) {
+        if(!value["finished"]) {
+            value['text'] = $('#'+key.toString()).children('.input').children('input').val()
+        }
+    }
     $.ajax({
         type: "POST",
         url: "/new_voting/",
         data: {
             'data':JSON.stringify({
                 'title': $('.title-input').val(),
-                'description': $('.desc-input').html(),
-                'choices': choices,
+                'description': $('.desc-input').val(),
+                'choices': choices.map(c => c['text']),
                 'choice_type': choice_type
             }),
             'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
         },
-        success: function(data){close_voting_editing()},
-        failure: function(errMsg) {
-            alert(errMsg);
-        }
+        success: (data) => {
+            if('error' in data) $('.error-container').html(data['error']);
+            else close_voting_editing();
+        },
+        failure: (errMsg) => alert(errMsg)
     });
 }

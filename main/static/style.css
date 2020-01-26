@@ -309,6 +309,10 @@ input[type=submit], input[type=button] {
     margin: 15px;
 }
 
+.edit-voting > .error-container > .login-fail {
+    width: 100%;
+}
+
 .show-top-anim {
   animation: top-anim 0.5s;
 }

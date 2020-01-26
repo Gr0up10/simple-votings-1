@@ -13,6 +13,7 @@ from django.shortcuts import render
 import main.db.db_control as dbControl
 
 from main.models import Voting, VoteVariant
+from main.validation import validate_voting
 from simple_votings import settings
 
 
@@ -49,11 +50,18 @@ def element(request, name):
 def new_voting(request):
     if request.POST:
         data = json.loads(request.POST['data'])
+        er = validate_voting(data)
+        if er:
+            return JsonResponse({
+                'success': False,
+                'error': render_to_string('registration/form_error.html', {'error': er})
+            })
+
         model = Voting(name=data['title'], description=data['description'], author=request.user, vtype=data['choice_type'])
         model.save()
 
         for choice in data['choices']:
-            VoteVariant(voting=model, name=choice['text']).save()
+            VoteVariant(voting=model, name=choice).save()
 
         return JsonResponse({'success': True})
 
