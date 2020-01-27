@@ -36,12 +36,21 @@
                       <div id="0" class="choice-variant active" onclick="choice_type_change()">{% trans "Single" %}</div>
                       <div id="1" class="choice-variant" onclick="choice_type_change()">{% trans "Multiple" %}</div>
                   </div>
+                  <div class="button edit-image" onclick="upload_file()">
+                    <div class="button-icon edit"></div>
+                    <p>Edit background image</p>
+                  </div>
+                  <form id="image-loader">
+                    <input name="image" id="image-selector" type="file" style="display:none">
+                  </form>
+
+<!--
                   <div class="edit-image">
                       <p class="label">{% trans "Background image" %}</p>
                       <form id="image-loader">
                         <input name="image" id="image-selector" type="file" style="display:block">
                       </form>
-                  </div>
+                  </div>-->
               </div>
           </div>
       </div>

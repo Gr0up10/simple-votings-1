@@ -88,3 +88,7 @@ function submit_voting() {
                                 }))
     http.send(form_data);
 }
+
+function upload_file() {
+    document.getElementById("image-selector").click();
+}
