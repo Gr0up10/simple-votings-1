@@ -15,7 +15,8 @@
           <p class="created-by">Created by: <span class="author">{{poll.author}}</span></p>
           <div class="stat">
             <p>40</p>
-            <div class="vote-icon stat-icon"></div>
+            {% csrf_token %}
+            <button class="btn vote-icon stat-icon" onclick="like({{poll.id}})"></button>
           </div>
           <div class="stat">
             <p>300</p>

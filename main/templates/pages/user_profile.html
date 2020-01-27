@@ -30,7 +30,12 @@
       </div>
     <br><br>
 
-    {% include 'base/poll_feed_base.html' %}
+    <div id="created_polls">
+        {% with polls=liked_polls%}
+        {% include 'base/poll_feed_base.html' %}
+        {%endwith%}
+    </div>
+
 
   </div>
 {% endblock %}

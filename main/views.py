@@ -12,7 +12,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render
 import main.db.db_control as dbControl
 
-from main.models import Voting, VoteVariant
+from main.models import Voting, VoteVariant, LeaveLike
 from simple_votings import settings
 
 
@@ -47,9 +47,7 @@ def element(request, name):
 
 
 def new_voting(request):
-    print(request, request.POST)
     if request.POST:
-        print(request.POST)
         data = json.loads(request.POST['data'])
         model = Voting(name=data['title'], description=data['description'], author=request.user, vtype=data['choice_type'])
         model.save()
@@ -60,6 +58,23 @@ def new_voting(request):
         return JsonResponse({'success': True})
 
     return render(request, 'base/edit_voting.html')
+
+
+def like(req):
+    print(req.POST)
+    if req.POST:
+        data = json.loads(req.POST["data"])
+        poll = Voting.objects.get(pk=data["poll_id"])
+
+        print("User {} liked poll #{}".format(req.user, data["poll_id"]))
+        liked, exists = LeaveLike.objects.get_or_create(user=req.user, target_poll=poll)
+        if not exists:
+            liked.save()
+        print("Like id - {}".format(liked.id))
+
+        return JsonResponse({'success': True})
+
+    return render(req, 'pages/polls_feed.html')
 
 
 def login_req(request):
@@ -119,11 +134,13 @@ def register_req(request):
 def profile_page(request, additional_context={}):
     context = {**additional_context, 'menu': get_menu_context(), 'login_form': AuthenticationForm()}
     polls = Voting.objects.filter(author=request.user).prefetch_related("votevariant_set")
+    liked_polls = Voting.objects.filter(author=request.user).prefetch_related("votevariant_set")
     context["polls_amount"] = polls.count()
-    context["polls_liked"] = 0        # TODO: обновить после добавления функционала сохранения опросов
+    context["polls_liked"] = liked_polls.count()
     if polls.exists():
         context["has_polls"] = True
-        context["polls"] = polls
+        context["created_polls"] = polls
+        context["liked_polls"] = liked_polls
     else:
         context["has_polls"] = False
 

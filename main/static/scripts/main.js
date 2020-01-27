@@ -71,3 +71,18 @@ function isEmpty(obj) {
 function last(obj) {
     return Object.keys(obj)[Object.keys(obj).length - 1]
 }
+
+function like(poll_id) {
+    $.ajax({
+        type:"POST",
+        url: '/leavelike/',
+        data: {
+            'data': JSON.stringify({
+                'poll_id': poll_id
+            }),
+            'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
+        },
+        success: function(){console.log("Liked!")},
+        failure: function(errMsg){console.log(errMsg)}
+    })
+}
