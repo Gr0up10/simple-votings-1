@@ -82,7 +82,16 @@ function like(poll_id) {
             }),
             'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
         },
-        success: function(){console.log("Liked!")},
+        success: function(){
+            let al = document.createElement("div")
+            al.classList.add("alert", "alert-primary")
+            al.textContent = "Опрос сохранен!"
+            document.getElementById(poll_id).appendChild(al)
+            console.log(al)
+            $(".alert").delay(2000).slideUp(100, function() {
+                $(this).remove();
+            });
+        },
         failure: function(errMsg){console.log(errMsg)}
     })
 }

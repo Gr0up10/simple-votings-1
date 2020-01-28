@@ -61,18 +61,17 @@ def new_voting(request):
 
 
 def like(req):
-    print(req.POST)
     if req.POST:
         data = json.loads(req.POST["data"])
         poll = Voting.objects.get(pk=data["poll_id"])
         liked, created = LikeModel.objects.get_or_create(user=req.user, target_poll=poll)
 
-        print("User {} liked poll #{} ({})".format(req.user, data["poll_id"], created))
+        # print("User {} liked poll #{} ({})".format(req.user, data["poll_id"], created))
         if created:
             liked.save()
-            print("Like id - {}".format(liked.id))
+            # print("Like id - {}".format(liked.id))
         else:
-            print("Removing like id - {}".format(liked.id))
+            # print("Removing like id - {}".format(liked.id))
             LikeModel.objects.filter(id=liked.id).delete()
 
         return JsonResponse({'success': True})
