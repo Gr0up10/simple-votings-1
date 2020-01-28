@@ -49,3 +49,9 @@ class Report(models.Model):
     description = models.CharField(max_length=2000)
     vtype = models.PositiveSmallIntegerField(choices=STATUSES, default=1)
     comment = models.CharField(max_length=200, null=True)
+
+
+class PollViewRecord(models.Model):
+    target_poll = models.ForeignKey(to=Voting, on_delete=models.CASCADE)
+    ip = models.CharField(max_length=16)
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE)

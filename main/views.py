@@ -250,3 +250,7 @@ def change_language(request):
     response = HttpResponse()
     response.set_cookie(settings.LANGUAGE_COOKIE_NAME, lang)
     return response
+
+
+def update_ciew_stats(req, polls):
+    pass
