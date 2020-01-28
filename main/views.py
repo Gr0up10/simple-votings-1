@@ -69,13 +69,14 @@ def vote(request):
                 percents = {}
 
                 for var in variants:
-                    percents[var.id] = 0
+                    percents[var.id] = [0, var.name]
 
                 for vote in votes:
-                    percents[vote.variant.id] = percents.get(vote.variant.id, 0) + 1
+                    percents[vote.variant.id][0] = percents.get(vote.variant.id, 0)[0] + 1
 
                 for key, val in percents.items():
-                    percents[key] = render_to_string('elements/finished_vote.html', {"percents": float(val)/count*100.0})
+                    percents[key] = render_to_string('elements/finished_vote.html',
+                                                     {"percents": round(float(val[0])/count*100.0, 2), "name": val[1]})
 
                 return JsonResponse({'success': True, 'results': percents})
             else:
