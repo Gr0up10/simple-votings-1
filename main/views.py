@@ -65,16 +65,18 @@ def like(req):
         data = json.loads(req.POST["data"])
         poll = Voting.objects.get(pk=data["poll_id"])
         liked, created = LikeModel.objects.get_or_create(user=req.user, target_poll=poll)
-
+        alert_text = None
         # print("User {} liked poll #{} ({})".format(req.user, data["poll_id"], created))
         if created:
             liked.save()
+            alert_text = "Опрос сохранен!"
             # print("Like id - {}".format(liked.id))
         else:
             # print("Removing like id - {}".format(liked.id))
             LikeModel.objects.filter(id=liked.id).delete()
+            alert_text = "Опрос удален из сохраненных!"
 
-        return JsonResponse({'created': created})
+        return JsonResponse({'created': created, "alert": alert_text})
 
     return render(req, 'pages/polls_feed.html')
 

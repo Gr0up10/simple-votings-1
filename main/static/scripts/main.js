@@ -86,13 +86,12 @@ function like(poll_id) {
             let al = document.createElement("div")
             if (data.created){
                 al.classList.add("alert", "alert-primary")
-                al.textContent = "Опрос сохранен!"
             } else {
                 al.classList.add("alert", "alert-warning")
-                al.textContent = "Опрос удален из сохраненных!"
             }
+            al.innerHTML = data.alert
             document.getElementById(poll_id).appendChild(al)
-            console.log(al)
+            console.log(al, data)
             $(".alert").delay(2000).slideUp(100, function() {
                 $(this).remove();
             });
