@@ -2,18 +2,24 @@ from urllib import request as urlrequest
 from urllib import parse
 import json
 
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseBadRequest, HttpResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
-from django.utils.translation import ugettext as _
+from django.utils import translation
+from django.utils.translation import ugettext as _, get_language
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.shortcuts import render
-import main.db.db_control as dbControl
+from django.views.decorators.csrf import csrf_exempt
 
-from main.models import Voting, VoteVariant, LikeModel
+import main.db.db_control as dbControl
+from main.models import Voting, VoteVariant, Vote, LikeModel
+from main.validation import validate_voting
 from simple_votings import settings
+
+from PIL import Image, UnidentifiedImageError
 
 
 def get_menu_context():
@@ -27,7 +33,10 @@ def get_menu_context():
 
 def index(req):
     context = {'menu': get_menu_context(), 'login_form': AuthenticationForm()}
-    polls = Voting.objects.prefetch_related("votevariant_set").all()
+    if req.user.is_authenticated:
+        polls = Voting.objects.prefetch_related("votevariant_set", "vote_set").all()
+    else:
+        polls = Voting.objects.prefetch_related("votevariant_set").all()
     if polls.exists():
         context["has_polls"] = True
         context["polls"] = polls
@@ -37,23 +46,82 @@ def index(req):
     return render(req, 'pages/polls_feed.html', context)
 
 
+@login_required
+@csrf_exempt
+def vote(request):
+    if request.POST:
+        choice = request.POST['choice']
+        voting_id = request.POST['voting']
+        voting = Voting.objects.get(id__exact=voting_id)
+        if voting:
+            variant = VoteVariant.objects.get(id__exact=choice)
+            if variant:
+                #my_vote = Vote.objects.filter(author=request.user, variant=variant, voting=voting)
+                #if my_vote:
+                #    return JsonResponse({'success': True, 'error': _('You already voted')})
+
+                my_vote = Vote(author=request.user, variant=variant, voting=voting)
+                my_vote.save()
+                variants = VoteVariant.objects.filter(voting=voting)
+                votes = Vote.objects.filter(voting=voting).all()
+                count = len(votes)
+                percents = {}
+
+                for var in variants:
+                    percents[var.id] = [0, var.name]
+
+                for vote in votes:
+                    percents[vote.variant.id][0] = percents.get(vote.variant.id, 0)[0] + 1
+
+                for key, val in percents.items():
+                    percents[key] = render_to_string('elements/finished_vote.html',
+                                                     {"percents": round(float(val[0])/count*100.0, 2), "name": val[1]})
+
+                return JsonResponse({'success': True, 'results': percents})
+            else:
+                return JsonResponse({'success': False, 'error': _('Voting variant is not exist')})
+        else:
+            return JsonResponse({'success': True, 'error': _('Voting is not exist')})
+
+
 def element(request, name):
     name_map = {'new_voting_choice': 'new_voting_choice.html',
-                'voting_choice': 'voting_choice.html'}
+                'voting_choice': 'voting_choice.html',
+                'finished_vote': 'finished_vote.html'}
     if name not in name_map:
         return HttpResponseBadRequest()
 
     return render(request, f"elements/{name_map[name]}")
 
 
+@login_required
 def new_voting(request):
+    def create_error(error):
+        return JsonResponse({
+            'success': False,
+            'error': render_to_string('registration/form_error.html', {'error': error})
+        })
+
     if request.POST:
+        if 'image' in request.FILES:
+            try:
+                img = Image.open(request.FILES['image'])
+                #if not img.verify():
+                #    return create_error(_('Image is corrupted'))
+            except UnidentifiedImageError:
+                return create_error(_('File should be image'))
         data = json.loads(request.POST['data'])
+        er = validate_voting(data)
+        if er:
+            return create_error(er)
+
         model = Voting(name=data['title'], description=data['description'], author=request.user, vtype=data['choice_type'])
+        if 'image' in request.FILES:
+            model.image = request.FILES['image']
         model.save()
 
         for choice in data['choices']:
-            VoteVariant(voting=model, name=choice['text']).save()
+            VoteVariant(voting=model, name=choice).save()
 
         return JsonResponse({'success': True})
 
@@ -146,6 +214,7 @@ def profile_page(request, content_type):
     context["polls_liked"] = liked_polls.count()
 
     polls = created_polls if content_type == 0 else liked_polls
+
     if polls.exists():
         context["has_polls"] = True
         context["polls"] = polls
@@ -153,3 +222,18 @@ def profile_page(request, content_type):
         context["has_polls"] = False
 
     return render(request, 'pages/user_profile.html', context)
+    
+
+@csrf_exempt
+def change_language(request):
+    if not request.POST:
+        return render(request, 'elements/languages.html')
+
+    lang = request.POST['language']
+    if lang != 'ru' and lang != 'en':
+        return HttpResponseBadRequest()
+
+    translation.activate(lang)
+    response = HttpResponse()
+    response.set_cookie(settings.LANGUAGE_COOKIE_NAME, lang)
+    return response

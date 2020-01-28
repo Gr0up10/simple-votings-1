@@ -1,13 +1,17 @@
 <!DOCTYPE html>
+
 <html lang="en">
     {% load static %}
     {% load bootstrap4 %}
+    {% load i18n %}
+
     <head>
         <meta charset="UTF-8">
         <title>{{ pagename }} - Simple votings</title>
 
         <script src="{% static 'scripts/main.js' %}"></script>
         <script src="{% static 'scripts/edit_voting.js' %}"></script>
+        <script src="{% static 'scripts/voting.js' %}"></script>
 
         {% bootstrap_css %}
         <link href="https://getbootstrap.com/docs/4.1/examples/sticky-footer-navbar/sticky-footer-navbar.css" rel="stylesheet">
@@ -19,6 +23,7 @@
     <body>
         <header>
             {% include 'base/menu.html' %}
+            {% include 'elements/languages.html'%}
         </header>
 
         <main role="main" class="container">
@@ -29,7 +34,7 @@
         <footer class="footer">
             {% block footer %}
             <div class="container text-right">
-                <span class="text-muted">&copy; ШП, {% now "Y" %}</span>
+                <span class="text-muted">&copy; {% trans "SP" %}, {% now "Y" %}</span>
             </div>
             {% endblock %}
         </footer>

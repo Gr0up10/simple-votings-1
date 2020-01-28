@@ -18,18 +18,20 @@ from django.urls import path
 
 from main import views
 from django.contrib.auth import views as auth_views
-
-from main.views import get_menu_context
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
     path('new_voting/', views.new_voting, name='new_voting'),
+    path('vote/', views.vote, name='vote'),
     path('element/<str:name>', views.element, name='element'),
     path('login/', views.login_req, name='login'),
     path('register/', views.register_req, name='register'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('profile/', views.profile_page, {'content_type': 0}),
     path('profile/liked/', views.profile_page, {'content_type': 1}),
-    path('leavelike/', views.like, name="like")
-]
+    path('leavelike/', views.like, name="like"),
+    path('change_language/', views.change_language)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,47 +1,60 @@
+{% load i18n %}
 <div class="fill"></div>
 <div class="centered">
     <div class="card-header">
-        <p class="selected">Edit</p>
+        <p class="selected">{% trans "Edit" %}</p>
         <div class="horizontal-sep"></div>
-        <p>Preview</p>
+        <p>{% trans "Preview" %}</p>
     </div>
     <div class="close-icon" onclick="close_voting_editing()"></div>
     <div class="card edit-voting" >
       <div class="card-body poll-body">
            {% csrf_token %}
           <div class="text-field">
-              <p class="label">Title</p>
+              <p class="label">{% trans "Title" %}</p>
               <div class="input" id="input">
                   <input class="title-input" type="text" maxlength="100">
                   <p class="char-counter">0/100</p>
               </div>
           </div>
           <div class="text-field">
-              <p class="label">Description</p>
-              <div class="text-area desc-input" contentEditable="true" id="input"></div>
+              <p class="label">{% trans "Description" %}</p>
+              <textarea class="text-area desc-input" id="input"></textarea>
               <p class="char-counter bottom">0/500</p>
           </div>
           <div class="choices-list">
-              <p class="label">Choices</p>
+              <p class="label">{% trans "Choices" %}</p>
               <button class="button add choice" onclick="add_new_choice()">
                   <div class="button-icon plus"></div>
-                  <p>Add new choice</p>
+                  <p>{% trans "Add new choice" %}</p>
               </button>
           </div>
           <div class="edit-footer">
-              <p class="label choice">Choice type</p>
+              <p class="label choice">{% trans "Choice type" %}</p>
               <div class="inline-elements">
                   <div class="choice-type">
-                      <div id="0" class="choice-variant active" onclick="choice_type_change()">Single</div>
-                      <div id="1" class="choice-variant" onclick="choice_type_change()">Multiple</div>
+                      <div id="0" class="choice-variant active" onclick="choice_type_change()">{% trans "Single" %}</div>
+                      <div id="1" class="choice-variant" onclick="choice_type_change()">{% trans "Multiple" %}</div>
                   </div>
-                  <div class="button edit-image">
-                      <div class="button-icon edit"></div>
-                      <p>Edit background image</p>
+                  <div class="button edit-image" onclick="upload_file()">
+                    <div class="button-icon edit"></div>
+                    <p>Edit background image</p>
                   </div>
+                  <form id="image-loader">
+                    <input name="image" id="image-selector" type="file" accept="image/*" style="display:none">
+                  </form>
+
+<!--
+                  <div class="edit-image">
+                      <p class="label">{% trans "Background image" %}</p>
+                      <form id="image-loader">
+                        <input name="image" id="image-selector" type="file" style="display:block">
+                      </form>
+                  </div>-->
               </div>
           </div>
       </div>
+        <div class="error-container"></div>
     </div>
-    <button class="create" onclick="submit_voting()">CREATE</button>
+    <button class="create" onclick="submit_voting()">{% trans "CREATE" %}</button>
 </div>

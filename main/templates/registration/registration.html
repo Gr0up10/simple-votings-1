@@ -1,3 +1,4 @@
+{% load i18n %}
 <form method="post" action="/register/" id="register-form">
     {% csrf_token %}
     {% for field in registration_form %}
@@ -10,7 +11,7 @@
             {{ field.label_tag }} {{ field }}
         </div>
     {% endfor %}
-    <label class="checkbox"> Agree with terms of use
+    <label class="checkbox"> {% trans 'Agree with terms of use' %}
         <input name="accept_terms" type="checkbox">
         <span class="checkmark"></span>
     </label>
@@ -21,6 +22,6 @@
     {% endif %}
     <script src='https://www.google.com/recaptcha/api.js'></script>
     <div class="g-recaptcha" data-sitekey="6LfmztAUAAAAADHG9um9MipePrcP9_DFuWrkjA3w"></div>
-    <p><input type="button" onclick="register()" value="Sing up"/></p>
+    <p><input type="button" onclick="register()" value="{% trans 'Sing up' %}"/></p>
 </form>
-<input type="button" value="Log in" onclick="show_login()" class="singup"/>
+<input type="button" value="{% trans 'Log in' %}" onclick="show_login()" class="singup"/>

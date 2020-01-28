@@ -48,12 +48,12 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
 ]
 
 ROOT_URLCONF = 'simple_votings.urls'
@@ -143,3 +143,9 @@ LOCALE_PATHS = (
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 30  # One month
 
 GOOGLE_RECAPTCHA_SECRET_KEY = '6LfmztAUAAAAAPoJMFw8My2HxhhRIq6zbMNqqJYi'
+
+LANGUAGE_COOKIE_NAME = 'lang'
+
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = "media/"
