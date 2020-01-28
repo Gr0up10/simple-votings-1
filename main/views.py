@@ -15,8 +15,7 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
 import main.db.db_control as dbControl
-
-from main.models import Voting, VoteVariant, Vote
+from main.models import Voting, VoteVariant, Vote, LikeModel
 from main.validation import validate_voting
 from simple_votings import settings
 
@@ -129,6 +128,27 @@ def new_voting(request):
     return render(request, 'base/edit_voting.html')
 
 
+def like(req):
+    if req.POST:
+        data = json.loads(req.POST["data"])
+        poll = Voting.objects.get(pk=data["poll_id"])
+        liked, created = LikeModel.objects.get_or_create(user=req.user, target_poll=poll)
+        alert_text = None
+        # print("User {} liked poll #{} ({})".format(req.user, data["poll_id"], created))
+        if created:
+            liked.save()
+            alert_text = "Опрос сохранен!"
+            # print("Like id - {}".format(liked.id))
+        else:
+            # print("Removing like id - {}".format(liked.id))
+            LikeModel.objects.filter(id=liked.id).delete()
+            alert_text = "Опрос удален из сохраненных!"
+
+        return JsonResponse({'created': created, "alert": alert_text})
+
+    return render(req, 'pages/polls_feed.html')
+
+
 def login_req(request):
     if not request.POST:
         return render(request, 'registration/login.html', {'login_form': AuthenticationForm()})
@@ -183,6 +203,27 @@ def register_req(request):
         return render_error(form, _('You filled fields incorrectly'))
 
 
+def profile_page(request, content_type):
+    context = {"content_type": content_type, 'menu': get_menu_context(), 'login_form': AuthenticationForm()}
+
+    created_polls = Voting.objects.filter(author=request.user).prefetch_related("votevariant_set")
+    liked = LikeModel.objects.filter(user=request.user).values('target_poll')
+    liked_polls = Voting.objects.filter(pk__in=liked)
+
+    context["polls_amount"] = created_polls.count()
+    context["polls_liked"] = liked_polls.count()
+
+    polls = created_polls if content_type == 0 else liked_polls
+
+    if polls.exists():
+        context["has_polls"] = True
+        context["polls"] = polls
+    else:
+        context["has_polls"] = False
+
+    return render(request, 'pages/user_profile.html', context)
+    
+
 @csrf_exempt
 def change_language(request):
     if not request.POST:
@@ -196,18 +237,3 @@ def change_language(request):
     response = HttpResponse()
     response.set_cookie(settings.LANGUAGE_COOKIE_NAME, lang)
     return response
-
-
-@login_required
-def profile_page(request, additional_context={}):
-    context = {**additional_context, 'menu': get_menu_context(), 'login_form': AuthenticationForm()}
-    polls = Voting.objects.filter(author=request.user).prefetch_related("votevariant_set")
-    context["polls_amount"] = polls.count()
-    context["polls_liked"] = 0        # TODO: обновить после добавления функционала сохранения опросов
-    if polls.exists():
-        context["has_polls"] = True
-        context["polls"] = polls
-    else:
-        context["has_polls"] = False
-
-    return render(request, 'pages/user_profile.html', context)

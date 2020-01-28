@@ -72,6 +72,33 @@ function last(obj) {
     return Object.keys(obj)[Object.keys(obj).length - 1]
 }
 
+function like(poll_id) {
+    $.ajax({
+        type:"POST",
+        url: '/leavelike/',
+        data: {
+            'data': JSON.stringify({
+                'poll_id': poll_id
+            }),
+            'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
+        },
+        success: function(data){
+            let al = document.createElement("div")
+            if (data.created){
+                al.classList.add("alert", "alert-primary")
+            } else {
+                al.classList.add("alert", "alert-warning")
+            }
+            al.innerHTML = data.alert
+            document.getElementById(poll_id).appendChild(al)
+            console.log(al, data)
+            $(".alert").delay(2000).slideUp(100, function() {
+                $(this).remove();
+            });
+        },
+        failure: function(errMsg){console.log(errMsg)}
+    })
+}
 function change_language(lang) {
     console.log(lang)
     $.ajax({

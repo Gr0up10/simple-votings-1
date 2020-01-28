@@ -20,6 +20,11 @@ class Voting(models.Model):
     vtype = models.PositiveSmallIntegerField(choices=VOTE_TYPES, default=1)
 
 
+class LikeModel(models.Model):
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    target_poll = models.ForeignKey(to=Voting, on_delete=models.CASCADE)
+
+
 class VoteVariant(models.Model):
     name = models.CharField(max_length=100)
     voting = models.ForeignKey(to=Voting, on_delete=models.CASCADE)
