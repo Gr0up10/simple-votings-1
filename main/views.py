@@ -4,6 +4,7 @@ import json
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.db.models import Count
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
@@ -34,12 +35,18 @@ def get_menu_context():
 def index(req):
     context = {'menu': get_menu_context(), 'login_form': AuthenticationForm()}
     if req.user.is_authenticated:
-        polls = Voting.objects.prefetch_related("votevariant_set", "vote_set").all()
+        poll_objs = Voting.objects.prefetch_related("votevariant_set", "vote_set").all()
     else:
-        polls = Voting.objects.prefetch_related("votevariant_set").all()
-    if polls.exists():
+        poll_objs = Voting.objects.prefetch_related("votevariant_set").all()
+    if poll_objs.exists():
         context["has_polls"] = True
-        context["polls"] = polls
+
+        likes = []
+        for poll in poll_objs:
+            likes.append(LikeModel.objects.filter(target_poll=poll).count())
+        context["likes"] = likes
+
+        context["polls"] = zip(poll_objs, likes)
     else:
         context["has_polls"] = False
 
@@ -214,11 +221,16 @@ def profile_page(request, content_type):
     context["polls_amount"] = created_polls.count()
     context["polls_liked"] = liked_polls.count()
 
-    polls = created_polls if content_type == 0 else liked_polls
-
-    if polls.exists():
+    poll_objs = created_polls if content_type == 0 else liked_polls
+    if poll_objs.exists():
         context["has_polls"] = True
-        context["polls"] = polls
+
+        likes = []
+        for poll in poll_objs:
+            likes.append(LikeModel.objects.filter(target_poll=poll).count())
+        context["likes"] = likes
+
+        context["polls"] = zip(poll_objs, likes)
     else:
         context["has_polls"] = False
 

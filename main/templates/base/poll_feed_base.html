@@ -1,5 +1,5 @@
 {% if has_polls %}
-  {% for poll in polls %}
+  {% for poll, likes in polls %}
     <div id="{{poll.id}}" class="card poll">
       {% if poll.image %}
         <div class="poll-bg" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(210, 217, 223, 0.96) 61%), url({{ poll.image.url }});"></div>
@@ -18,7 +18,7 @@
         <div class="card-bottom">
           <p class="created-by">Created by: <span class="author">{{poll.author}}</span></p>
           <div class="stat">
-            <p>40</p>
+            <p>{{likes}}</p>
             {% csrf_token %}
             <button class="btn vote-icon stat-icon" onclick="like({{poll.id}})"></button>
           </div>
