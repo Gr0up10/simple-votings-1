@@ -74,7 +74,7 @@ def like(req):
             # print("Removing like id - {}".format(liked.id))
             LikeModel.objects.filter(id=liked.id).delete()
 
-        return JsonResponse({'success': True})
+        return JsonResponse({'created': created})
 
     return render(req, 'pages/polls_feed.html')
 

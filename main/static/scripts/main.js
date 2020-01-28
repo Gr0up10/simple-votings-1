@@ -82,10 +82,15 @@ function like(poll_id) {
             }),
             'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
         },
-        success: function(){
+        success: function(data){
             let al = document.createElement("div")
-            al.classList.add("alert", "alert-primary")
-            al.textContent = "Опрос сохранен!"
+            if (data.created){
+                al.classList.add("alert", "alert-primary")
+                al.textContent = "Опрос сохранен!"
+            } else {
+                al.classList.add("alert", "alert-warning")
+                al.textContent = "Опрос удален из сохраненных!"
+            }
             document.getElementById(poll_id).appendChild(al)
             console.log(al)
             $(".alert").delay(2000).slideUp(100, function() {
