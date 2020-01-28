@@ -12,7 +12,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render
 import main.db.db_control as dbControl
 
-from main.models import Voting, VoteVariant, LeaveLike
+from main.models import Voting, VoteVariant, LikeModel
 from simple_votings import settings
 
 
@@ -67,7 +67,7 @@ def like(req):
         poll = Voting.objects.get(pk=data["poll_id"])
 
         print("User {} liked poll #{}".format(req.user, data["poll_id"]))
-        liked, exists = LeaveLike.objects.get_or_create(user=req.user, target_poll=poll)
+        liked, exists = LikeModel.objects.get_or_create(user=req.user, target_poll=poll)
         if not exists:
             liked.save()
         print("Like id - {}".format(liked.id))
