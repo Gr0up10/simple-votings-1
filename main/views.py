@@ -203,6 +203,7 @@ def register_req(request):
         return render_error(form, _('You filled fields incorrectly'))
 
 
+@login_required
 def profile_page(request, content_type):
     context = {"content_type": content_type, 'menu': get_menu_context(), 'login_form': AuthenticationForm()}
 
