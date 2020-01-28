@@ -7,9 +7,8 @@ from django.utils.translation import ugettext as _
 
 class Voting(models.Model):
     VOTE_TYPES = (
-        (1, 'Дискретный выбор'),
-        (2, 'Один из многих'),
-        (3, 'Несколько из многих'),
+        (0, _('Single')),
+        (1, _('Multiple')),
     )
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=500)
@@ -35,10 +34,10 @@ class Vote(models.Model):
 
 class Report(models.Model):
     STATUSES = (
-        (0, 'Отправлено модераторам'),
-        (1, 'На рассмотрении'),
-        (2, 'Вердикт положительный'),
-        (3, 'Вердикт отрицательный'),
+        (0, _('Sent to staff members')),#'Отправлено модераторам', На рассмотрении,  'Вердикт положительный' 'Вердикт отрицательный'
+        (1, _('Consideration in progress')),
+        (2, _('Approved')),
+        (3, _('Declined')),
     )
     author = models.ForeignKey(to=User, on_delete=models.CASCADE)
     vote = models.ForeignKey(to=Voting, on_delete=models.CASCADE)

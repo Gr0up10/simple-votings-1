@@ -10,6 +10,13 @@ function vote() {
         //headers: {'X-CSRFToken', $('input[name="csrfmiddlewaretoken"]'},
         success: (data) => {
             console.log(data)
+            if(data.success){
+                let cont = el.parent()
+                console.log(data.results)
+                Object.keys(data.results).forEach(function(key) {
+                    cont.children('#'+key.toString()).replaceWith(data.results[key])
+                })
+            }
         },
     });
 }

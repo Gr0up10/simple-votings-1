@@ -34,7 +34,10 @@ def get_menu_context():
 
 def index(req):
     context = {'menu': get_menu_context(), 'login_form': AuthenticationForm()}
-    polls = Voting.objects.prefetch_related("votevariant_set").all()
+    if req.user.is_authenticated:
+        polls = Voting.objects.prefetch_related("votevariant_set", "vote_set").all()
+    else:
+        polls = Voting.objects.prefetch_related("votevariant_set").all()
     if polls.exists():
         context["has_polls"] = True
         context["polls"] = polls
@@ -54,19 +57,25 @@ def vote(request):
         if voting:
             variant = VoteVariant.objects.get(id__exact=choice)
             if variant:
+                #my_vote = Vote.objects.filter(author=request.user, variant=variant, voting=voting)
+                #if my_vote:
+                #    return JsonResponse({'success': True, 'error': _('You already voted')})
+
                 my_vote = Vote(author=request.user, variant=variant, voting=voting)
                 my_vote.save()
                 variants = VoteVariant.objects.filter(voting=voting)
                 votes = Vote.objects.filter(voting=voting).all()
                 count = len(votes)
                 percents = {}
+
                 for var in variants:
                     percents[var.id] = 0
+
                 for vote in votes:
                     percents[vote.variant.id] = percents.get(vote.variant.id, 0) + 1
 
                 for key, val in percents.items():
-                    percents[key] = float(val)/count
+                    percents[key] = render_to_string('elements/finished_vote.html', {"percents": float(val)/count*100.0})
 
                 return JsonResponse({'success': True, 'results': percents})
             else:
