@@ -26,10 +26,11 @@ class VoteVariant(models.Model):
     voting = models.ForeignKey(to=Voting, on_delete=models.CASCADE)
 
 
-class VoteFact(models.Model):
+class Vote(models.Model):
     author = models.ForeignKey(to=User, on_delete=models.CASCADE)
     variant = models.ForeignKey(to=VoteVariant, on_delete=models.CASCADE)  # TODO: think about VOTE_TYPES(3)
     date = models.DateTimeField(default=datetime.datetime.now)
+    voting = models.ForeignKey(to=Voting, on_delete=models.CASCADE)
 
 
 class Report(models.Model):

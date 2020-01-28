@@ -2,6 +2,7 @@ from urllib import request as urlrequest
 from urllib import parse
 import json
 
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponse
 from django.shortcuts import render, redirect
@@ -15,7 +16,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 import main.db.db_control as dbControl
 
-from main.models import Voting, VoteVariant
+from main.models import Voting, VoteVariant, Vote
 from main.validation import validate_voting
 from simple_votings import settings
 
@@ -43,15 +44,48 @@ def index(req):
     return render(req, 'pages/polls_feed.html', context)
 
 
+@login_required
+@csrf_exempt
+def vote(request):
+    if request.POST:
+        choice = request.POST['choice']
+        voting_id = request.POST['voting']
+        voting = Voting.objects.get(id__exact=voting_id)
+        if voting:
+            variant = VoteVariant.objects.get(id__exact=choice)
+            if variant:
+                my_vote = Vote(author=request.user, variant=variant, voting=voting)
+                my_vote.save()
+                variants = VoteVariant.objects.filter(voting=voting)
+                votes = Vote.objects.filter(voting=voting).all()
+                count = len(votes)
+                percents = {}
+                for var in variants:
+                    percents[var.id] = 0
+                for vote in votes:
+                    percents[vote.variant.id] = percents.get(vote.variant.id, 0) + 1
+
+                for key, val in percents.items():
+                    percents[key] = float(val)/count
+
+                return JsonResponse({'success': True, 'results': percents})
+            else:
+                return JsonResponse({'success': False, 'error': _('Voting variant is not exist')})
+        else:
+            return JsonResponse({'success': True, 'error': _('Voting is not exist')})
+
+
 def element(request, name):
     name_map = {'new_voting_choice': 'new_voting_choice.html',
-                'voting_choice': 'voting_choice.html'}
+                'voting_choice': 'voting_choice.html',
+                'finished_vote': 'finished_vote.html'}
     if name not in name_map:
         return HttpResponseBadRequest()
 
     return render(request, f"elements/{name_map[name]}")
 
 
+@login_required
 def new_voting(request):
     def create_error(error):
         return JsonResponse({
@@ -60,7 +94,6 @@ def new_voting(request):
         })
 
     if request.POST:
-        img = None
         if 'image' in request.FILES:
             try:
                 img = Image.open(request.FILES['image'])
@@ -155,6 +188,7 @@ def change_language(request):
     return response
 
 
+@login_required
 def profile_page(request, additional_context={}):
     context = {**additional_context, 'menu': get_menu_context(), 'login_form': AuthenticationForm()}
     polls = Voting.objects.filter(author=request.user).prefetch_related("votevariant_set")
