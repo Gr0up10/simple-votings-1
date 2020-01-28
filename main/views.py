@@ -134,16 +134,20 @@ def register_req(request):
         return render_error(form, _('You filled fields incorrectly'))
 
 
-def profile_page(request, additional_context={}):
-    context = {**additional_context, 'menu': get_menu_context(), 'login_form': AuthenticationForm()}
-    polls = Voting.objects.filter(author=request.user).prefetch_related("votevariant_set")
-    liked_polls = Voting.objects.filter(author=request.user).prefetch_related("votevariant_set")
-    context["polls_amount"] = polls.count()
+def profile_page(request, content_type):
+    context = {"content_type": content_type, 'menu': get_menu_context(), 'login_form': AuthenticationForm()}
+
+    created_polls = Voting.objects.filter(author=request.user).prefetch_related("votevariant_set")
+    liked = LikeModel.objects.filter(user=request.user).values('target_poll')
+    liked_polls = Voting.objects.filter(pk__in=liked)
+
+    context["polls_amount"] = created_polls.count()
     context["polls_liked"] = liked_polls.count()
+
+    polls = created_polls if content_type == 0 else liked_polls
     if polls.exists():
         context["has_polls"] = True
-        context["created_polls"] = polls
-        context["liked_polls"] = liked_polls
+        context["polls"] = polls
     else:
         context["has_polls"] = False
 

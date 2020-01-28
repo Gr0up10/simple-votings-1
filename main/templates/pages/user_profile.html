@@ -20,22 +20,29 @@
 
     <div class="container">
       <div class="row justify-content-md-center">
-        <div class="col col-lg-4">
-            <h3 class="text-right font-weight-bolder">Мои опросы</h3>
+        <div class="col col-lg-5">
+            <a class="text-right" href="/profile/">
+                {% if content_type == 0 %}
+                <h3 class="font-weight-bolder text-dark" >Мои опросы</h3>
+                {% else %}
+                <h3 class="text-dark">Мои опросы</h3>
+                {% endif %}
+            </a>
         </div>
         <div class="vertical_line"></div>
-        <div class="col col-lg-4">
-            <h3 class="text-left">Сохраненные опросы</h3>
+          <div class="col col-lg-5">
+            <a class="text-left" href="/profile/liked/">
+                {% if content_type == 1 %}
+                <h3 class="font-weight-bolder text-dark">Сохраненные опросы</h3>
+                {% else %}
+                <h3 class="text-dark">Сохраненные опросы</h3>
+                {% endif %}
+            </a>
         </div>
       </div>
     <br><br>
-
-    <div id="created_polls">
-        {% with polls=liked_polls%}
-        {% include 'base/poll_feed_base.html' %}
-        {%endwith%}
-    </div>
-
-
   </div>
-{% endblock %}
+
+    {% include 'base/poll_feed_base.html' %}
+
+    {% endblock %}
