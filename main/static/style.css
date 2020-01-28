@@ -678,3 +678,28 @@ button.done {
     cursor: pointer;
 }
 
+.finished-vote {
+    position: relative;
+    background: none;
+    margin-bottom: 14px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.progress-bar {
+    background: #73ABC2;
+    border-radius: 8px;
+    margin: 0px;
+}
+
+.finished-vote > .percents {
+    position: absolute;
+    right: 0px;
+    float: left;
+    font-size: 18px;
+    line-height: 21px;
+    color: #989898;
+    top: 50%;
+    transform: translateY(-50%);
+}
+

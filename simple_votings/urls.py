@@ -25,6 +25,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
     path('new_voting/', views.new_voting, name='new_voting'),
+    path('vote/', views.vote, name='vote'),
     path('element/<str:name>', views.element, name='element'),
     path('login/', views.login_req, name='login'),
     path('register/', views.register_req, name='register'),
