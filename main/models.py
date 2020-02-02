@@ -53,5 +53,4 @@ class Report(models.Model):
 
 class PollViewRecord(models.Model):
     target_poll = models.ForeignKey(to=Voting, on_delete=models.CASCADE)
-    ip = models.CharField(max_length=16)
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)

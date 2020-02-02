@@ -51,7 +51,7 @@ def index(req):
         poll_objs = Voting.objects.prefetch_related("votevariant_set").all()
 
     for poll in poll_objs:
-        viewed, created = PollViewRecord.objects.get_or_create(target_poll=poll, user=req.user, ip=req.ip)
+        viewed, created = PollViewRecord.objects.get_or_create(target_poll=poll, user=req.user)
         if created:
             viewed.save()
 
