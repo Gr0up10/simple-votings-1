@@ -23,6 +23,14 @@ from simple_votings import settings
 from PIL import Image, UnidentifiedImageError
 
 
+def fetch_poll_stats(polls):
+    likes = []
+    for poll in polls:
+        likes.append(LikeModel.objects.filter(target_poll=poll).count())
+
+    return zip(polls, likes)
+
+
 def get_menu_context():
     return [
         {'function': 'go_to_page(\'/\')', 'name': _('Votings')},
@@ -40,13 +48,7 @@ def index(req):
         poll_objs = Voting.objects.prefetch_related("votevariant_set").all()
     if poll_objs.exists():
         context["has_polls"] = True
-
-        likes = []
-        for poll in poll_objs:
-            likes.append(LikeModel.objects.filter(target_poll=poll).count())
-        context["likes"] = likes
-
-        context["polls"] = zip(poll_objs, likes)
+        context["polls"] = fetch_poll_stats(poll_objs)
     else:
         context["has_polls"] = False
 
@@ -224,13 +226,7 @@ def profile_page(request, content_type):
     poll_objs = created_polls if content_type == 0 else liked_polls
     if poll_objs.exists():
         context["has_polls"] = True
-
-        likes = []
-        for poll in poll_objs:
-            likes.append(LikeModel.objects.filter(target_poll=poll).count())
-        context["likes"] = likes
-
-        context["polls"] = zip(poll_objs, likes)
+        context["polls"] = fetch_poll_stats(poll_objs)
     else:
         context["has_polls"] = False
 
@@ -252,5 +248,5 @@ def change_language(request):
     return response
 
 
-def update_ciew_stats(req, polls):
+def update_view_stats(req, polls):
     pass
