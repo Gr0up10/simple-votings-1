@@ -4,6 +4,7 @@ import json
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.db.models import Count
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
@@ -15,11 +16,21 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
 import main.db.db_control as dbControl
-from main.models import Voting, VoteVariant, Vote, LikeModel
+from main.models import Voting, VoteVariant, Vote, LikeModel, PollViewRecord
 from main.validation import validate_voting
 from simple_votings import settings
 
 from PIL import Image, UnidentifiedImageError
+
+
+def fetch_poll_stats(polls):
+    likes = []
+    views = []
+    for poll in polls:
+        likes.append(LikeModel.objects.filter(target_poll=poll).count())
+        views.append(PollViewRecord.objects.filter(target_poll=poll).count())
+
+    return zip(polls, likes, views)
 
 
 def get_menu_context():
@@ -33,13 +44,20 @@ def get_menu_context():
 
 def index(req):
     context = {'menu': get_menu_context(), 'login_form': AuthenticationForm()}
+
     if req.user.is_authenticated:
-        polls = Voting.objects.prefetch_related("votevariant_set", "vote_set").all()
+        poll_objs = Voting.objects.prefetch_related("votevariant_set", "vote_set").all()
     else:
-        polls = Voting.objects.prefetch_related("votevariant_set").all()
-    if polls.exists():
+        poll_objs = Voting.objects.prefetch_related("votevariant_set").all()
+
+    for poll in poll_objs:
+        viewed, created = PollViewRecord.objects.get_or_create(target_poll=poll, user=req.user)
+        if created:
+            viewed.save()
+
+    if poll_objs.exists():
         context["has_polls"] = True
-        context["polls"] = polls
+        context["polls"] = fetch_poll_stats(poll_objs)
     else:
         context["has_polls"] = False
 
@@ -214,11 +232,10 @@ def profile_page(request, content_type):
     context["polls_amount"] = created_polls.count()
     context["polls_liked"] = liked_polls.count()
 
-    polls = created_polls if content_type == 0 else liked_polls
-
-    if polls.exists():
+    poll_objs = created_polls if content_type == 0 else liked_polls
+    if poll_objs.exists():
         context["has_polls"] = True
-        context["polls"] = polls
+        context["polls"] = fetch_poll_stats(poll_objs)
     else:
         context["has_polls"] = False
 
@@ -238,3 +255,7 @@ def change_language(request):
     response = HttpResponse()
     response.set_cookie(settings.LANGUAGE_COOKIE_NAME, lang)
     return response
+
+
+def update_view_stats(req, polls):
+    pass
