@@ -16,7 +16,7 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
 import main.db.db_control as dbControl
-from main.models import Voting, VoteVariant, Vote, LikeModel
+from main.models import Voting, VoteVariant, Vote, LikeModel, PollViewRecord
 from main.validation import validate_voting
 from simple_votings import settings
 
@@ -25,10 +25,12 @@ from PIL import Image, UnidentifiedImageError
 
 def fetch_poll_stats(polls):
     likes = []
+    views = []
     for poll in polls:
         likes.append(LikeModel.objects.filter(target_poll=poll).count())
+        views.append(PollViewRecord.objects.filter(target_poll=poll).count())
 
-    return zip(polls, likes)
+    return zip(polls, likes, views)
 
 
 def get_menu_context():
@@ -42,10 +44,17 @@ def get_menu_context():
 
 def index(req):
     context = {'menu': get_menu_context(), 'login_form': AuthenticationForm()}
+
     if req.user.is_authenticated:
         poll_objs = Voting.objects.prefetch_related("votevariant_set", "vote_set").all()
     else:
         poll_objs = Voting.objects.prefetch_related("votevariant_set").all()
+
+    for poll in poll_objs:
+        viewed, created = PollViewRecord.objects.get_or_create(target_poll=poll, user=req.user, ip=req.ip)
+        if created:
+            viewed.save()
+
     if poll_objs.exists():
         context["has_polls"] = True
         context["polls"] = fetch_poll_stats(poll_objs)
