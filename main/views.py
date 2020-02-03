@@ -50,10 +50,11 @@ def index(req):
     else:
         poll_objs = Voting.objects.prefetch_related("votevariant_set").all()
 
-    for poll in poll_objs:
-        viewed, created = PollViewRecord.objects.get_or_create(target_poll=poll, user=req.user)
-        if created:
-            viewed.save()
+    if req.user.is_authenticated:
+        for poll in poll_objs:
+            viewed, created = PollViewRecord.objects.get_or_create(target_poll=poll, user=req.user)
+            if created:
+                viewed.save()
 
     if poll_objs.exists():
         context["has_polls"] = True
