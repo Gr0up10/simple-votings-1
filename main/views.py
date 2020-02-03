@@ -16,7 +16,8 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
 import main.db.db_control as dbControl
-from main.models import Voting, VoteVariant, Vote, LikeModel, PollViewRecord
+from main.forms import ReportForm
+from main.models import Voting, VoteVariant, Vote, LikeModel, PollViewRecord, Report
 from main.validation import validate_voting
 from simple_votings import settings
 
@@ -74,8 +75,8 @@ def vote(request):
         if voting:
             variant = VoteVariant.objects.get(id__exact=choice)
             if variant:
-                #my_vote = Vote.objects.filter(author=request.user, variant=variant, voting=voting)
-                #if my_vote:
+                # my_vote = Vote.objects.filter(author=request.user, variant=variant, voting=voting)
+                # if my_vote:
                 #    return JsonResponse({'success': True, 'error': _('You already voted')})
 
                 my_vote = Vote(author=request.user, variant=variant, voting=voting)
@@ -93,7 +94,8 @@ def vote(request):
 
                 for key, val in percents.items():
                     percents[key] = render_to_string('elements/finished_vote.html',
-                                                     {"percents": round(float(val[0])/count*100.0, 2), "name": val[1]})
+                                                     {"percents": round(float(val[0]) / count * 100.0, 2),
+                                                      "name": val[1]})
 
                 return JsonResponse({'success': True, 'results': percents})
             else:
@@ -124,7 +126,7 @@ def new_voting(request):
         if 'image' in request.FILES:
             try:
                 img = Image.open(request.FILES['image'])
-                #if not img.verify():
+                # if not img.verify():
                 #    return create_error(_('Image is corrupted'))
             except UnidentifiedImageError:
                 return create_error(_('File should be image'))
@@ -133,7 +135,8 @@ def new_voting(request):
         if er:
             return create_error(er)
 
-        model = Voting(name=data['title'], description=data['description'], author=request.user, vtype=data['choice_type'])
+        model = Voting(name=data['title'], description=data['description'], author=request.user,
+                       vtype=data['choice_type'])
         if 'image' in request.FILES:
             model.image = request.FILES['image']
         model.save()
@@ -147,7 +150,16 @@ def new_voting(request):
 
 
 def new_report(req):
-    return render(req, 'base/report_create.html')
+    context = {"form": ReportForm()}
+    if req.POST:
+        form = ReportForm(req.POST)
+        if form.is_valid():
+            model = Report(author=req.user, vote=Voting.objects.get(pk=form.data["target_poll"]),
+                           description=form.data["description"])
+            print(model)
+            model.save()
+        return redirect("/")
+    return render(req, 'base/report_create.html', context)
 
 
 def like(req):
@@ -185,7 +197,7 @@ def login_req(request):
     else:
         return JsonResponse({'success': False,
                              'error': render_to_string('registration/form_error.html',
-                                                       {'error':  _('Username or password is incorrect')})})
+                                                       {'error': _('Username or password is incorrect')})})
 
 
 def register_req(request):
@@ -244,7 +256,7 @@ def profile_page(request, content_type):
         context["has_polls"] = False
 
     return render(request, 'pages/user_profile.html', context)
-    
+
 
 @csrf_exempt
 def change_language(request):

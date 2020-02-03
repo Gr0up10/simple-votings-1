@@ -112,7 +112,8 @@ function change_language(lang) {
 }
 
 function show_report_creation(id) {
-    render_in('/new_report/', '.popups', ()=> $(".centered").addClass('show-top-anim'))
+    render_in('/new_report/', '.popups', ()=> {$(".centered").addClass('show-top-anim')})
+    $(".text-left").append(id)
     //document.getElementById("voting_id").innerHTML = id
 }
 

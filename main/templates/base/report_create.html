@@ -4,20 +4,22 @@
     <div class="card edit-voting">
 
     <div class="card-header">
-        <h1 class="text-left">{% trans "Report voting" %}</h1>
+        <h1 class="text-left">{% trans "Report voting" %} <b id="voting_id"></b></h1>
         <div class="close close-icon" onclick="close_report()"></div>
     </div>
 
     <div class="card-body">
-        <p>{% trans "Please describe what rules this voting violates in the field below" %}</p>
-           {% csrf_token %}
-          <div class="text-field">
-              <textarea class="text-area desc-input" id="input"></textarea>
-<!--              <p class="char-counter bottom">0/500</p>-->
-          </div>
+        <form action="/new_report/" method="post">
+            <p>{% trans "Please describe what rules this voting violates in the field below" %}</p>
+               {% csrf_token %}
+              <div class="text-field">
+                  <input class="text-area desc-input" id="description">
+    <!--              <p class="char-counter bottom">0/500</p>-->
+              </div>
+            <input type="submit" class="create mx-auto" value='{% trans "Submit" %}'>
+<!--            <button class="create mx-auto" onclick="submit_report()">{% trans "Submit" %}</button>-->
+        </form>
     </div>
-
-    <button class="create mx-auto" onclick="submit_report()">{% trans "Submit" %}</button>
 
     </div>
 
