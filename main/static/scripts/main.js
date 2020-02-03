@@ -110,3 +110,17 @@ function change_language(lang) {
         },
     });
 }
+
+function show_report_creation(id) {
+    render_in('/new_report/', '.popups', ()=> $(".centered").addClass('show-top-anim'))
+    //document.getElementById("voting_id").innerHTML = id
+}
+
+function close_report() {
+    $('.centered').addClass('hide-top-anim');
+    setTimeout(()=>$('.popups').html(''), 400)
+}
+
+function submit_report() {
+
+}

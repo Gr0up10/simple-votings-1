@@ -146,6 +146,10 @@ def new_voting(request):
     return render(request, 'base/edit_voting.html')
 
 
+def new_report(req):
+    return render(req, 'base/report_create.html')
+
+
 def like(req):
     if req.POST:
         data = json.loads(req.POST["data"])
