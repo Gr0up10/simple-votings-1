@@ -23,14 +23,17 @@ from simple_votings import settings
 from PIL import Image, UnidentifiedImageError
 
 
-def fetch_poll_stats(polls):
+def fetch_poll_stats(polls, user):
     likes = []
     views = []
+    voted = []
     for poll in polls:
         likes.append(LikeModel.objects.filter(target_poll=poll).count())
         views.append(PollViewRecord.objects.filter(target_poll=poll).count())
+        voted.append((get_voting_results(poll) if Vote.objects.filter(voting=poll, author=user).count() > 0 else None) if user else None)
+        print((get_voting_results(poll) if Vote.objects.filter(voting=poll, author=user).count() > 0 else None) if user else None)
 
-    return zip(polls, likes, views)
+    return zip(polls, likes, views, voted)
 
 
 def get_menu_context():
@@ -58,11 +61,30 @@ def index(req):
 
     if poll_objs.exists():
         context["has_polls"] = True
-        context["polls"] = fetch_poll_stats(poll_objs)
+        context["polls"] = fetch_poll_stats(poll_objs, req.user if req.user.is_authenticated else None)
     else:
         context["has_polls"] = False
 
     return render(req, 'pages/polls_feed.html', context)
+
+
+def get_voting_results(voting):
+    variants = VoteVariant.objects.filter(voting=voting)
+    votes = Vote.objects.filter(voting=voting).all()
+    count = len(votes)
+    percents = {}
+
+    for var in variants:
+        percents[var.id] = [0, var.name]
+
+    for vote in votes:
+        percents[vote.variant.id][0] = percents.get(vote.variant.id, 0)[0] + 1
+
+    for key, val in percents.items():
+        percents[key] = render_to_string('elements/finished_vote.html',
+                                         {"percents": round(float(val[0]) / count * 100.0, 2), "name": val[1]})
+
+    return percents
 
 
 @login_required
@@ -81,22 +103,8 @@ def vote(request):
 
                 my_vote = Vote(author=request.user, variant=variant, voting=voting)
                 my_vote.save()
-                variants = VoteVariant.objects.filter(voting=voting)
-                votes = Vote.objects.filter(voting=voting).all()
-                count = len(votes)
-                percents = {}
 
-                for var in variants:
-                    percents[var.id] = [0, var.name]
-
-                for vote in votes:
-                    percents[vote.variant.id][0] = percents.get(vote.variant.id, 0)[0] + 1
-
-                for key, val in percents.items():
-                    percents[key] = render_to_string('elements/finished_vote.html',
-                                                     {"percents": round(float(val[0])/count*100.0, 2), "name": val[1]})
-
-                return JsonResponse({'success': True, 'results': percents})
+                return JsonResponse({'success': True, 'results': get_voting_results(voting)})
             else:
                 return JsonResponse({'success': False, 'error': _('Voting variant is not exist')})
         else:
