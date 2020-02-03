@@ -396,6 +396,7 @@ input[type=submit], input[type=button] {
     right: 0px;
     top: 20px;
     cursor: pointer;
+    margin-right: 20px;
 }
 
 .text-field {
