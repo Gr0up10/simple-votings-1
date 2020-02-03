@@ -139,6 +139,16 @@ p {
     vertical-align: middle;
 }
 
+.report {
+    background: rgba(115, 171, 194, 0.9);
+    height: 25px;
+    margin: 0;
+    margin-bottom: 5px;
+    padding-top: 1px;
+    padding-bottom: 2px;
+    border: none;
+}
+
 .stat > p {
     display: inline-block;
     vertical-align: middle;

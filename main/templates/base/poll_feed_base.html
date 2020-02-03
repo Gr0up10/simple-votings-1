@@ -16,19 +16,19 @@
           <div id="{{vote.id}}" class="btn btn-primary vote" onclick="vote()">{{vote.name}}</div>
         {% endfor %}
         <div class="card-bottom">
-          <p class="created-by">Created by: <span class="author">{{poll.author}}</span></p>
-          <div class="stat">
+          <p class="created-by align-self-start">Created by: <span class="author">{{poll.author}}</span></p>
+          <div class="stat align-self-center">
             <p>{{likes}}</p>
             {% csrf_token %}
             <button class="btn vote-icon stat-icon" onclick="like({{poll.id}})"></button>
           </div>
-          <div class="stat">
+          <div class="stat align-self-center">
             <p>{{views}}</p>
             <div class="view-icon stat-icon"></div>
           </div>
+          <button type="button" class="btn btn-info report align-self-end" onclick="show_report_creation({{poll.id}})">Report</button>
         </div>
       </div>
-      <button type="button" class="btn btn-info" onclick="show_report_creation({{poll.id}})">Report</button>
     </div>
   {% endfor %}
 
