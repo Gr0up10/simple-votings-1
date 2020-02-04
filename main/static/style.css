@@ -723,3 +723,6 @@ button.done {
     transform: translateY(-50%);
 }
 
+.my-report {
+    background: #F0EFEF;
+}

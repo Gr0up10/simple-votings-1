@@ -63,10 +63,11 @@
 
     {% for report, poll in reports%}
 
-    <div class="card poll">
+    <div class="card poll my-report">
         <div class="card-head">
             <h2 class="card-title">{% trans "Reported voting" %}: <b>{{poll.name}}</b> (#{{report.vote.id}})</h2>
         </div>
+        <hr>
         <div class="card-body">
             <h3>Report description:</h3>
             <p class="card-text">{{report.description}}</p>
