@@ -1,5 +1,5 @@
 {% if has_polls %}
-  {% for poll, likes, views in polls %}
+  {% for poll, likes, views, voted in polls %}
     <div id="{{poll.id}}" class="card poll">
       {% if poll.image %}
         <div class="poll-bg" style="background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(210, 217, 223, 0.96) 61%), url({{ poll.image.url }});"></div>
@@ -12,9 +12,15 @@
           <p class="card-title vote-title">{{poll.name}}</p>
           <p class="card-text poll_description">{{poll.description}}</p>
         </div>
-        {% for vote in poll.votevariant_set.all %}
-          <div id="{{vote.id}}" class="btn btn-primary vote" onclick="vote()">{{vote.name}}</div>
-        {% endfor %}
+        {% if voted %}
+          {% for i, res in voted.items %}
+            {{res}}
+          {% endfor %}
+        {% else %}
+          {% for vote in poll.votevariant_set.all %}
+            <div id="{{vote.id}}" class="btn btn-primary vote" onclick="vote()">{{vote.name}}</div>
+          {% endfor %}
+        {% endif %}
         <div class="card-bottom">
           <p class="created-by align-self-start">Created by: <span class="author">{{poll.author}}</span></p>
           <div class="stat align-self-center">
