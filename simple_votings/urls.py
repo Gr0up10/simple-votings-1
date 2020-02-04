@@ -33,6 +33,7 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('profile/', views.profile_page, {'content_type': 0}),
     path('profile/liked/', views.profile_page, {'content_type': 1}),
+    path('profile/reports/', views.profile_page, {'content_type': 2}),
     path('leavelike/', views.like, name="like"),
     path('change_language/', views.change_language)
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
