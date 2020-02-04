@@ -1,27 +1,33 @@
 {% load i18n %}
 <div class="fill"></div>
 <div class="centered">
-    <div class="card edit-voting">
+        <div class="card edit-voting">
 
-    <div class="card-header">
-        <h1 class="text-left">{% trans "Report voting" %} <b id="voting_id"></b></h1>
-        <div class="close close-icon" onclick="close_report()"></div>
-    </div>
+        <div class="card-header">
+            <h1 class="text-left">{% trans "Report voting" %}</h1>
+            <div class="close close-icon" onclick="close_report()"></div>
+        </div>
 
-    <div class="card-body">
-        <form action="/new_report/" method="post">
-            <p>{% trans "Please describe what rules this voting violates in the field below" %}</p>
-               {% csrf_token %}
-              <div class="text-field">
-                  <input class="text-area desc-input" id="description">
-    <!--              <p class="char-counter bottom">0/500</p>-->
-              </div>
-            <input type="submit" class="create mx-auto" value='{% trans "Submit" %}'>
-<!--            <button class="create mx-auto" onclick="submit_report()">{% trans "Submit" %}</button>-->
-        </form>
-    </div>
-
-    </div>
+        <div class="card-body">
+                <p>{% trans "Please describe what rules this voting violates in the field below" %}</p>
+                    <h2 class="inline-elements">{% trans "Voting ID:" %}</h2>
+                      <div class="text-field">
+                        <form action="/new_report/" method="post" id="report_form">
+                            {% csrf_token %}
+                            {{form.target_poll}}
+                            {{form.description}}
+                            <input type="submit" class="create mx-auto" value='{% trans "Submit" %}'>
+                        </form>
+                      </div>
+                    </div>
+        </div>
 
     <div class="error-container"></div>
 </div>
+
+<script>
+    $('#report_form').on('submit', function(event){
+    event.preventDefault();
+    send_report();
+});
+</script>

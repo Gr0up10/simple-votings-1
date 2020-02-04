@@ -138,7 +138,17 @@ p {
     margin-right: 20px;
     vertical-align: middle;
 }
-
+.report_voting_id {
+      display: inline-block;
+      border-top-style: hidden;
+      border-right-style: hidden;
+      border-left-style: hidden;
+      border-bottom-style: groove;
+      outline: none;
+      background-color: rgba(0, 0, 0, 0);
+      width: 20%;
+      font-size: 2em
+}
 .report {
     background: rgba(115, 171, 194, 0.9);
     height: 25px;

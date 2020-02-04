@@ -152,13 +152,14 @@ def new_voting(request):
 def new_report(req):
     context = {"form": ReportForm()}
     if req.POST:
-        form = ReportForm(req.POST)
-        if form.is_valid():
-            model = Report(author=req.user, vote=Voting.objects.get(pk=form.data["target_poll"]),
-                           description=form.data["description"])
-            print(model)
-            model.save()
-        return redirect("/")
+        target_poll = int(req.POST["target_poll"])
+        description = req.POST["description"]
+        vote = Voting.objects.get(id=target_poll)
+        print(target_poll, description, vote)
+        model = Report(author=req.user, vote=vote, description=description)
+        print(model)
+        model.save()
+        return JsonResponse({'success': True})
     return render(req, 'base/report_create.html', context)
 
 
