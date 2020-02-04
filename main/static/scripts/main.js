@@ -139,7 +139,10 @@ function send_report(){
          },
 
         success : function(data) {
-            console.log(data);
+            $('.centered').removeClass('hide-top-anim');
+            setTimeout(()=>$('.popups').html(''), 400)
+            $(".centered").addClass('hide-top-anim');
+            window.location = "/"
         },
 
         error : function(xhr,errmsg,err) {
