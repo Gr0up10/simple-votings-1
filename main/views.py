@@ -1,26 +1,23 @@
-from urllib import request as urlrequest
-from urllib import parse
 import json
+from urllib import parse
+from urllib import request as urlrequest
 
+from PIL import Image, UnidentifiedImageError
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from django.db.models import Count
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponse
-from django.shortcuts import render, redirect
-from django.template.loader import render_to_string
-from django.utils import translation
-from django.utils.translation import ugettext as _, get_language
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.models import User
 from django.shortcuts import render
+from django.template.loader import render_to_string
+from django.urls import reverse
+from django.utils import translation
+from django.utils.translation import ugettext as _
 from django.views.decorators.csrf import csrf_exempt
 
 from main.forms import ReportForm
 from main.models import Voting, VoteVariant, Vote, LikeModel, PollViewRecord, Report
 from main.validation import validate_voting
 from simple_votings import settings
-
-from PIL import Image, UnidentifiedImageError
 
 
 def fetch_poll_stats(polls, user):
@@ -30,16 +27,18 @@ def fetch_poll_stats(polls, user):
     for poll in polls:
         likes.append(LikeModel.objects.filter(target_poll=poll).count())
         views.append(PollViewRecord.objects.filter(target_poll=poll).count())
-        voted.append((get_voting_results(poll) if Vote.objects.filter(voting=poll, author=user).count() > 0 else None) if user else None)
-        print((get_voting_results(poll) if Vote.objects.filter(voting=poll, author=user).count() > 0 else None) if user else None)
+        voted.append((get_voting_results(poll) if Vote.objects.filter(voting=poll,
+                                                                      author=user).count() > 0 else None) if user else None)
+        print((get_voting_results(poll) if Vote.objects.filter(voting=poll,
+                                                               author=user).count() > 0 else None) if user else None)
 
     return zip(polls, likes, views, voted)
 
 
 def get_menu_context():
     return [
-        {'function': 'go_to_page(\'/\')', 'name': _('Votings')},
-        {'function': 'go_to_page(\'/profile/\')', 'name': _('Profile')},
+        {'function': 'go_to_page(\'/\')', 'name': _('Votings'), 'path': reverse('index')},
+        {'function': 'go_to_page(\'/profile/\')', 'name': _('Profile'), 'path': reverse('profile')},
         {'function': 'show_voting_creation()', 'name': _('Create voting')},
         {'function': 'go_to_page(\'/logout\')', 'name': _('Logout')},
     ]
@@ -97,10 +96,6 @@ def vote(request):
         if voting:
             variant = VoteVariant.objects.get(id__exact=choice)
             if variant:
-                # my_vote = Vote.objects.filter(author=request.user, variant=variant, voting=voting)
-                # if my_vote:
-                #    return JsonResponse({'success': True, 'error': _('You already voted')})
-
                 my_vote = Vote(author=request.user, variant=variant, voting=voting)
                 my_vote.save()
 
@@ -133,8 +128,6 @@ def new_voting(request):
         if 'image' in request.FILES:
             try:
                 img = Image.open(request.FILES['image'])
-                # if not img.verify():
-                #    return create_error(_('Image is corrupted'))
             except UnidentifiedImageError:
                 return create_error(_('File should be image'))
         data = json.loads(request.POST['data'])
@@ -162,9 +155,7 @@ def new_report(req):
         target_poll = int(req.POST["target_poll"])
         description = req.POST["description"]
         vote = Voting.objects.get(id=target_poll)
-        # print(target_poll, description, vote)
         model = Report(author=req.user, vote=vote, description=description)
-        # print(model)
         model.save()
         return JsonResponse({'success': True})
     return render(req, 'base/report_create.html', context)
@@ -176,18 +167,13 @@ def like(req):
         poll = Voting.objects.get(pk=data["poll_id"])
         liked, created = LikeModel.objects.get_or_create(user=req.user, target_poll=poll)
         alert_text = None
-        # print("User {} liked poll #{} ({})".format(req.user, data["poll_id"], created))
         if created:
             liked.save()
             alert_text = "Опрос сохранен!"
-            # print("Like id - {}".format(liked.id))
         else:
-            # print("Removing like id - {}".format(liked.id))
             LikeModel.objects.filter(id=liked.id).delete()
             alert_text = "Опрос удален из сохраненных!"
-
         return JsonResponse({'created': created, "alert": alert_text})
-
     return render(req, 'pages/polls_feed.html')
 
 
@@ -220,8 +206,7 @@ def register_req(request):
     if request.POST.get('accept_terms', None) is None:
         return render_error(form, _('You should agree with terms of use'))
     if form.is_valid():
-        # validate recaptcha
-        recaptcha_response = request.POST.get('g-recaptcha-response')
+        recaptcha_response = request.POST.get('g-recaptcha-response')  # validate recaptcha
         url = 'https://www.google.com/recaptcha/api/siteverify'
         values = {
             'secret': settings.GOOGLE_RECAPTCHA_SECRET_KEY,

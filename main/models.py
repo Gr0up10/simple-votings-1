@@ -15,8 +15,6 @@ class Voting(models.Model):
     author = models.ForeignKey(to=User, on_delete=models.CASCADE)
     image = models.ImageField(null=True, upload_to="images/")
     create_date = models.DateTimeField(default=datetime.datetime.now)
-    # publish_date = models.DateTimeField()
-    # finish_date = models.DateTimeField()
     vtype = models.PositiveSmallIntegerField(choices=VOTE_TYPES, default=1)
 
 

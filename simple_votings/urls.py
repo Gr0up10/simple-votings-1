@@ -31,7 +31,7 @@ urlpatterns = [
     path('login/', views.login_req, name='login'),
     path('register/', views.register_req, name='register'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
-    path('profile/', views.profile_page, {'content_type': 0}),
+                  path('profile/', views.profile_page, {'content_type': 0}, name='profile'),
     path('profile/liked/', views.profile_page, {'content_type': 1}),
     path('profile/reports/', views.profile_page, {'content_type': 2}),
     path('leavelike/', views.like, name="like"),
