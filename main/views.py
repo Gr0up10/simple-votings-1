@@ -15,6 +15,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
+from main.forms import ReportForm
 from main.models import Voting, VoteVariant, Vote, LikeModel, PollViewRecord, Report
 from main.validation import validate_voting
 from simple_votings import settings
@@ -161,9 +162,9 @@ def new_report(req):
         target_poll = int(req.POST["target_poll"])
         description = req.POST["description"]
         vote = Voting.objects.get(id=target_poll)
-        print(target_poll, description, vote)
+        # print(target_poll, description, vote)
         model = Report(author=req.user, vote=vote, description=description)
-        print(model)
+        # print(model)
         model.save()
         return JsonResponse({'success': True})
     return render(req, 'base/report_create.html', context)
@@ -259,7 +260,7 @@ def profile_page(request, content_type):
         poll_objs = created_polls if content_type == 0 else liked_polls
         if poll_objs.exists():
             context["has_polls"] = True
-            context["polls"] = fetch_poll_stats(poll_objs)
+            context["polls"] = fetch_poll_stats(poll_objs, request.user)
         else:
             context["has_polls"] = False
     else:
