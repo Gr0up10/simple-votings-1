@@ -48,9 +48,9 @@ def index(req):
     context = {'menu': get_menu_context(), 'login_form': AuthenticationForm()}
 
     if req.user.is_authenticated:
-        poll_objs = Voting.objects.prefetch_related("votevariant_set", "vote_set").all()
+        poll_objs = Voting.objects.prefetch_related("votevariant_set", "vote_set").all().order_by('-create_date')
     else:
-        poll_objs = Voting.objects.prefetch_related("votevariant_set").all()
+        poll_objs = Voting.objects.prefetch_related("votevariant_set").all().order_by('-create_date')
 
     if req.user.is_authenticated:
         for poll in poll_objs:
