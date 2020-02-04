@@ -33,7 +33,7 @@ def validate_voting(voting):
     if len(voting['choices']) < 2:
         return _('There are should be at least two choices')
 
-    if voting['choice_type'] > 1:
+    if int(voting['choice_type']) > 1:
         return _('Choice type should be binary')
 
     for i, choice in enumerate(voting['choices']):
