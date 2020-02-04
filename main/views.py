@@ -234,14 +234,14 @@ def register_req(request):
 def profile_page(request, content_type):
     context = {"content_type": content_type, 'menu': get_menu_context(), 'login_form': AuthenticationForm()}
 
+    created_polls = Voting.objects.filter(author=request.user).prefetch_related("votevariant_set")
+    liked = LikeModel.objects.filter(user=request.user).values('target_poll')
+    liked_polls = Voting.objects.filter(pk__in=liked)
+
+    context["polls_amount"] = created_polls.count()
+    context["polls_liked"] = liked_polls.count()
+
     if content_type != 2:
-        created_polls = Voting.objects.filter(author=request.user).prefetch_related("votevariant_set")
-        liked = LikeModel.objects.filter(user=request.user).values('target_poll')
-        liked_polls = Voting.objects.filter(pk__in=liked)
-
-        context["polls_amount"] = created_polls.count()
-        context["polls_liked"] = liked_polls.count()
-
         poll_objs = created_polls if content_type == 0 else liked_polls
         if poll_objs.exists():
             context["has_polls"] = True
