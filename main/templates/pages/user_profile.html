@@ -20,7 +20,7 @@
 
     <div class="container">
       <div class="row justify-content-md-center">
-        <div class="col col-lg-5">
+        <div class="col col-lg-3">
             <a class="text-right" href="/profile/">
                 {% if content_type == 0 %}
                 <h3 class="font-weight-bolder text-dark" >{% trans "My votings" %}</h3>
@@ -29,9 +29,11 @@
                 {% endif %}
             </a>
         </div>
+
         <div class="vertical_line"></div>
-          <div class="col col-lg-5">
-            <a class="text-left" href="/profile/liked/">
+
+        <div class="col col-lg-3">
+            <a class="text-center" href="/profile/liked/">
                 {% if content_type == 1 %}
                 <h3 class="font-weight-bolder text-dark">{% trans "Saved votings" %}</h3>
                 {% else %}
@@ -39,10 +41,41 @@
                 {% endif %}
             </a>
         </div>
+
+        <div class="vertical_line"></div>
+
+        <div class="col col-lg-3">
+            <a class="text-left" href="/profile/reports/">
+                {% if content_type == 2 %}
+                <h3 class="font-weight-bolder text-dark">{% trans "My reports" %}</h3>
+                {% else %}
+                <h3 class="text-dark">{% trans "My reports" %}</h3>
+                {% endif %}
+            </a>
+        </div>
       </div>
     <br><br>
   </div>
 
+    {% if content_type != 2%}
     {% include 'base/poll_feed_base.html' %}
+    {% else %}
+
+    {% for report, poll in reports%}
+
+    <div class="card poll my-report">
+        <div class="card-head">
+            <h2 class="card-title">{% trans "Reported voting" %}: <b>{{poll.name}}</b> (#{{report.vote.id}})</h2>
+        </div>
+        <hr>
+        <div class="card-body">
+            <h3>Report description:</h3>
+            <p class="card-text">{{report.description}}</p>
+        </div>
+    </div>
+
+    {%endfor%}
+
+    {%endif%}
 
     {% endblock %}

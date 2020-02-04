@@ -15,8 +15,8 @@ from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
-import main.db.db_control as dbControl
-from main.models import Voting, VoteVariant, Vote, LikeModel, PollViewRecord
+from main.forms import ReportForm
+from main.models import Voting, VoteVariant, Vote, LikeModel, PollViewRecord, Report
 from main.validation import validate_voting
 from simple_votings import settings
 
@@ -97,8 +97,8 @@ def vote(request):
         if voting:
             variant = VoteVariant.objects.get(id__exact=choice)
             if variant:
-                #my_vote = Vote.objects.filter(author=request.user, variant=variant, voting=voting)
-                #if my_vote:
+                # my_vote = Vote.objects.filter(author=request.user, variant=variant, voting=voting)
+                # if my_vote:
                 #    return JsonResponse({'success': True, 'error': _('You already voted')})
 
                 my_vote = Vote(author=request.user, variant=variant, voting=voting)
@@ -133,7 +133,7 @@ def new_voting(request):
         if 'image' in request.FILES:
             try:
                 img = Image.open(request.FILES['image'])
-                #if not img.verify():
+                # if not img.verify():
                 #    return create_error(_('Image is corrupted'))
             except UnidentifiedImageError:
                 return create_error(_('File should be image'))
@@ -142,7 +142,8 @@ def new_voting(request):
         if er:
             return create_error(er)
 
-        model = Voting(name=data['title'], description=data['description'], author=request.user, vtype=data['choice_type'])
+        model = Voting(name=data['title'], description=data['description'], author=request.user,
+                       vtype=data['choice_type'])
         if 'image' in request.FILES:
             model.image = request.FILES['image']
         model.save()
@@ -153,6 +154,20 @@ def new_voting(request):
         return JsonResponse({'success': True})
 
     return render(request, 'base/edit_voting.html')
+
+
+def new_report(req):
+    context = {"form": ReportForm()}
+    if req.POST:
+        target_poll = int(req.POST["target_poll"])
+        description = req.POST["description"]
+        vote = Voting.objects.get(id=target_poll)
+        # print(target_poll, description, vote)
+        model = Report(author=req.user, vote=vote, description=description)
+        # print(model)
+        model.save()
+        return JsonResponse({'success': True})
+    return render(req, 'base/report_create.html', context)
 
 
 def like(req):
@@ -190,7 +205,7 @@ def login_req(request):
     else:
         return JsonResponse({'success': False,
                              'error': render_to_string('registration/form_error.html',
-                                                       {'error':  _('Username or password is incorrect')})})
+                                                       {'error': _('Username or password is incorrect')})})
 
 
 def register_req(request):
@@ -234,22 +249,28 @@ def register_req(request):
 def profile_page(request, content_type):
     context = {"content_type": content_type, 'menu': get_menu_context(), 'login_form': AuthenticationForm()}
 
-    created_polls = Voting.objects.filter(author=request.user).prefetch_related("votevariant_set")
-    liked = LikeModel.objects.filter(user=request.user).values('target_poll')
-    liked_polls = Voting.objects.filter(pk__in=liked)
+    if content_type != 2:
+        created_polls = Voting.objects.filter(author=request.user).prefetch_related("votevariant_set")
+        liked = LikeModel.objects.filter(user=request.user).values('target_poll')
+        liked_polls = Voting.objects.filter(pk__in=liked)
 
-    context["polls_amount"] = created_polls.count()
-    context["polls_liked"] = liked_polls.count()
+        context["polls_amount"] = created_polls.count()
+        context["polls_liked"] = liked_polls.count()
 
-    poll_objs = created_polls if content_type == 0 else liked_polls
-    if poll_objs.exists():
-        context["has_polls"] = True
-        context["polls"] = fetch_poll_stats(poll_objs)
+        poll_objs = created_polls if content_type == 0 else liked_polls
+        if poll_objs.exists():
+            context["has_polls"] = True
+            context["polls"] = fetch_poll_stats(poll_objs, request.user)
+        else:
+            context["has_polls"] = False
     else:
-        context["has_polls"] = False
+        reports = Report.objects.filter(author=request.user)
+        poll_titles = Voting.objects.filter(pk__in=reports.values("vote")).values("name")
+
+        context["reports"] = zip(reports, poll_titles)
 
     return render(request, 'pages/user_profile.html', context)
-    
+
 
 @csrf_exempt
 def change_language(request):

@@ -110,3 +110,43 @@ function change_language(lang) {
         },
     });
 }
+
+function show_report_creation(id) {
+    render_in('/new_report/', '.popups', ()=> {
+        $(".centered").addClass('show-top-anim');
+        $("#id_target_poll").attr("value", id);
+        $("#id_target_poll").attr("disabled", "");
+        $("#id_target_poll").addClass("report_voting_id inline-elements");
+        $("#id_description").addClass('text-area desc-input');
+    })
+}
+
+function close_report() {
+    $('.centered').addClass('hide-top-anim');
+    setTimeout(()=>$('.popups').html(''), 400)
+}
+
+function send_report(){
+    console.log("form submitted!")
+
+    $.ajax({
+        url : "/new_report/",
+        type : "POST",
+        data : {
+            target_poll : $('#id_target_poll').val(),
+            description : $('#id_description').val(),
+            csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
+         },
+
+        success : function(data) {
+            $('.centered').removeClass('hide-top-anim');
+            setTimeout(()=>$('.popups').html(''), 400)
+            $(".centered").addClass('hide-top-anim');
+            window.location = "/"
+        },
+
+        error : function(xhr,errmsg,err) {
+            console.log(xhr.status + ": " + xhr.responseText);
+        }
+    });
+}

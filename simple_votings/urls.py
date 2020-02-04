@@ -25,6 +25,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
     path('new_voting/', views.new_voting, name='new_voting'),
+    path('new_report/', views.new_report, name='new_report'),
     path('vote/', views.vote, name='vote'),
     path('element/<str:name>', views.element, name='element'),
     path('login/', views.login_req, name='login'),
@@ -32,6 +33,7 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('profile/', views.profile_page, {'content_type': 0}),
     path('profile/liked/', views.profile_page, {'content_type': 1}),
+    path('profile/reports/', views.profile_page, {'content_type': 2}),
     path('leavelike/', views.like, name="like"),
     path('change_language/', views.change_language)
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
